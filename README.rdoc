@@ -8,6 +8,38 @@ A survey is essentially a form.
 - two modes for a survey: :show and :edit.
   In :show mode, fields are simply shown and cannot be changed.
   In :edit mode, fields can be changed.
+- surveys can be fully internationalized.
+- a survey has:
+  = a name
+  = a set of rules for [:validation, :hiding, :editing]
+- when a survey validation fails, a message is shown on top of the form
+  and (possibly) involved fields are highlighted
+- a survey can contain:
+  = sections
+  = fields
+- a field has
+  = an identifying name
+  = a label
+  = a help text
+  = a set of rules for [:validation, :hiding, :editing]
+- when a field validation fails, a message is shown on top of the form 
+  and field is highlighted
+- field types:
+  = text field
+  = text area
+  = calendar
+  = fill-in-the-blanks
+  = checkbox
+  = rating
+  = list-selector
+  = radio-selector
+  = upload-file
+- field options:
+  = :hide_if _rule_ - rule to determine when the field is hidden
+  = :readonly_if _rule_ - rule to determine when the field is not available for editing
+  = :class - css class
+- survey items can be multiple.
+  That means that in :edit mode, user can dynamically add/remove items of that type.
 - activating a survey generates data. That data could be associated
   to an existent object (ActiveRecord) or stored in a generic one: Exam
 - optional: a survey has a mode :design that lets the user to change
@@ -16,5 +48,5 @@ A survey is essentially a form.
   somewhere. Although it would be easier in a document-based database,
   a classic choice is a relational database (ActiveRecord)
 
----
+------
 *** That's all, folks! ***
