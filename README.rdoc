@@ -1,3 +1,20 @@
 = Surveyor
 
-This project rocks and uses MIT-LICENSE.
+Gem to manage surveys.
+A survey is essentially a form.
+
+== Features
+- DSL to describe a survey
+- two modes for a survey: :show and :edit.
+  In :show mode, fields are simply shown and cannot be changed.
+  In :edit mode, fields can be changed.
+- activating a survey generates data. That data could be associated
+  to an existent object (ActiveRecord) or stored in a generic one: Exam
+- optional: a survey has a mode :design that lets the user to change
+  the survey structure. 
+- optional: if a survey can be changed dynamically, it needs to be stored
+  somewhere. Although it would be easier in a document-based database,
+  a classic choice is a relational database (ActiveRecord)
+
+---
+*** That's all, folks! ***
