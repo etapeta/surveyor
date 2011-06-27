@@ -17,7 +17,7 @@ A survey is essentially a form.
     html form is parsed and assigned to the object (and sub-objects)
 - surveys can be fully internationalized.
 - a survey has:
-  = a name
+  = a name (alphanumeric with underscores, never containing '__')
   = a set of rules for [:validation, :hiding, :editing]
 - when a survey validation fails, a message is shown on top of the form
   and (possibly) involved fields are highlighted
@@ -25,13 +25,23 @@ A survey is essentially a form.
   = sections
   = fields
   = fields aggregators
+- a section can be considered a field aggregator, like a sequence that does not change
+  their fields' name.
+  Es:
+    section 'area' do
+      text 'width'    # => form['width']
+      text 'height'   # => form['height']
+    end
+  It can also be used eempty to freely mix text between fields:
+    section 'first_note' do
+    end
 - a field has
   = an identifying name
   = a label
   = a help text
   = a set of rules for [:validation, :hiding, :editing]
   The value of a field is an object, generally a string.
-- when a field validation fails, a message is shown on top of the form 
+- when a field validation fails, a message is shown on top of the form
   and field is highlighted
 - field types:
   = text field
@@ -44,14 +54,23 @@ A survey is essentially a form.
   = radio-selector
   = upload-file
 - field options:
+  = :required - true if the field is mandatory
   = :reject_if _rule_ - rule to determine when the value is not accepted
   = :hide_if _rule_ - rule to determine when the field is hidden
   = :readonly_if _rule_ - rule to determine when the field is not available for editing
   = :class - css class
+  = :regexp _regexp_ - validates the field value to satisfy the regexp
   A rule can be a block, a symbol or an array of symbols.
   A symbol references an existent rule, both predefined or defined further in the survey
-- a field aggregator is a container that influences how contained elements are displayed 
-  and memorized. 
+  A rule could also have arguments.
+  Examples:
+  [
+    :presence, # also with :required => true
+    :is_number, # also with :regexp => /\d*/
+    :match['age', :greater_than], #different from another field
+  ]
+- a field aggregator is a container that influences how contained elements are displayed
+  and memorized.
   Examples:
   = sequence
     A sequence contains a list of elements that are displayed sequentially.
@@ -66,9 +85,19 @@ A survey is essentially a form.
     can be added or removed. In this case, name of the multiplier is optional.
     If it contains more fields, they are considered a sequence and that sequence gets
     multiplied. In this case, name of the multiplier is mandatory.
-- a field can have a block that defines field rules and other detailed field information
+- in DSL, a field can have a block that defines field rules and other details
 - survey items can be multiple.
   That means that in :edit mode, user can dynamically add/remove items of that type.
+- instantiated fields have a unique id, that mirrors its path. Even multiplied ones.
+  The id maps biunivocally the field html name in form
+  Es: optional_opinion__1__reason # => form['optional_opinion'][1]['reason']
+- The internationalized data comes from the id, but it can be changed in path.
+  Example:
+    multiplier 'opinions', :label => :opi do
+      text_field '
+  From the id comes also the internationalized data.
+  Is it possible to overlay the default internationalized labels.
+  It is also possible to do it for 
 - activating a survey generates data. That data could be associated
   to an existent object (ActiveRecord) or stored in a generic one: Exam
 - optional: a survey has a mode :design that lets the user to change
