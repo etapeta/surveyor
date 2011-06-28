@@ -39,6 +39,12 @@ module Surveyor
       @container = container
     end
 
+    def section(name, options = {}, &blk)
+      section = Section.new(@container, name, options)
+      ContainerParser.new(section).instance_exec(&blk) if blk
+      @container.elements << section
+    end
+
     def string(name, options = {})
       @container.elements << StringElement.new(@container, name, options)
     end
