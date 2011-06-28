@@ -5,10 +5,13 @@ A survey is essentially a form.
 
 == Features
 - two modes for a survey: :show and :edit.
+
   In :show mode, fields are simply shown and cannot be changed.
+
   In :edit mode, fields can be changed.
 - DSL to describe a survey
 - a survey can be output in html as a form.
+
   When a survey is rendered:
   * it can be given an optional object to render
   * based on the survey definition, a hash (possibly multi-level) is generated
@@ -61,43 +64,57 @@ A survey is essentially a form.
   * :class - css class
   * :regexp _regexp_ - validates the field value to satisfy the regexp
   A rule can be a block, a symbol or an array of symbols.
+
   A symbol references an existent rule, both predefined or defined further in the survey
+
   A rule could also have arguments.
+
   Examples:
-  [
     :presence, # also with :required => true
     :is_number, # also with :regexp => /\d*/
     :match['age', :greater_than], #different from another field
-  ]
 - a field aggregator is a container that influences how contained elements are displayed
   and memorized.
+
   Examples:
   * sequence
     A sequence contains a list of elements that are displayed sequentially.
+
     It has a name identifying.
+
     The value of a sequence is an hash
+
     A sequence can be seen as a single field.
   * inline
     It is a sequence that displays its elements as a single field.
+
     NOTE: Is it really necessary?
   * multiplier
+
     If it contains a single field, that can be multiplied, i.e. more identical fields
     can be added or removed. In this case, name of the multiplier is optional.
+
     If it contains more fields, they are considered a sequence and that sequence gets
     multiplied. In this case, name of the multiplier is mandatory.
 - in DSL, a field can have a block that defines field rules and other details
 - survey items can be multiple.
   That means that in :edit mode, user can dynamically add/remove items of that type.
 - instantiated fields have a unique id, that mirrors its path. Even multiplied ones.
+
   The id maps biunivocally the field html name in form
+
   Es: optional_opinion__1__reason # => form['optional_opinion'][1]['reason']
 - The internationalized data comes from the id, but it can be changed in path.
+
   Example:
     multiplier 'opinions', :label => :opi do
-      text_field '
-  From the id comes also the internationalized data.
+      text_field 'title'
+    end
+
   Is it possible to overlay the default internationalized labels.
-  It is also possible to do it for 
+
+  It is also possible to do it for groups.
+
 - activating a survey generates data. That data could be associated
   to an existent object (ActiveRecord) or stored in a generic one: Exam
 - optional: a survey has a mode :design that lets the user to change
