@@ -131,7 +131,7 @@ A survey is essentially a form.
 
   survey 'one' do
     string 'header'
-    multiplier 'opinions', :label => :opi do
+    multiplier 'opinions' do
       string 'title'
     end
     section 'body' do
