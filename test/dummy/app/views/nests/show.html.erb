@@ -1,0 +1,25 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Name:</b>
+  <%= @nest.name %>
+</p>
+
+<p>
+  <b>Document:</b>
+  <%= @nest.document %>
+</p>
+
+<p>
+  <b>Header:</b>
+  <%= @nest.header %>
+</p>
+
+<p>
+  <b>Footer:</b>
+  <%= @nest.footer %>
+</p>
+
+
+<%= link_to 'Edit', edit_nest_path(@nest) %> |
+<%= link_to 'Back', nests_path %>
