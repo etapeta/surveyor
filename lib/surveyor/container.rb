@@ -7,5 +7,13 @@ module Surveyor
       @elements = []
     end
 
+    # The default value that this element has when the survey
+    # is instanciated (empty)
+    # Since this element resembles an ordered hash, with
+    # keys being element names, it has a hob as base value.
+    def base_value
+      Hob.new(self)
+    end
+
   end
 end

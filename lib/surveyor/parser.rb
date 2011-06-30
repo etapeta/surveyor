@@ -45,6 +45,18 @@ module Surveyor
       @container.elements << section
     end
 
+    def sequence(name, options = {}, &blk)
+      seq = Sequence.new(@container, name, options)
+      ContainerParser.new(seq).instance_exec(&blk) if blk
+      @container.elements << seq
+    end
+
+    def multiplier(name, options = {}, &blk)
+      mult = Multiplier.new(@container, name, options)
+      ContainerParser.new(mult).instance_exec(&blk) if blk
+      @container.elements << mult
+    end
+
     def string(name, options = {})
       @container.elements << StringElement.new(@container, name, options)
     end

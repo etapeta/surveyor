@@ -126,6 +126,24 @@ A survey is essentially a form.
   somewhere. Although it would be easier in a document-based database,
   a classic choice is a relational database (ActiveRecord)
 
+- a Hob 
+  * is an prototypical object that holds a survey status;
+  * it accepts a survey in constructor, dynamically extending its protocol
+    to provide access to all survey fields;
+  * it can be partially or totally updated by a HHash;
+  * it can output its representation as a HHash
+  NOTE: A HHash is a hierarchical hash that can only contain strings, arrays 
+  or other HHashes.
+
+    class Hob
+      def initialize(survey, hhash = {})
+      end
+      def update(hhash)
+      end
+      def to_hash(except_keys = [])
+      end
+    end
+
 ------
 *** That's all, folks! ***
 
