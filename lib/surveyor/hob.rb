@@ -8,6 +8,28 @@ module Surveyor
       setup_interface_from(@container)
     end
 
+    def update(hash)
+      hash.each do |k,v|
+        case v
+        when Hash
+          self[k].update(v)
+        when Array
+          hob_array = self[k]
+          result_array = v.collecy do |item|
+            # item should be a hash
+            
+            
+            
+            
+            
+            
+            
+            self[k].update(v)
+        else
+        end
+      end
+    end
+
     private
 
     def eigenclass

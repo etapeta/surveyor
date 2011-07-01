@@ -133,7 +133,7 @@ A survey is essentially a form.
   * it can be partially or totally updated by a HHash;
   * it can output its representation as a HHash
   NOTE: A HHash is a hierarchical hash that can only contain strings, arrays 
-  or other HHashes.
+  or other HHashes. It is what generally comes from a form (i.e. params)
 
     class Hob
       def initialize(survey, hhash = {})
