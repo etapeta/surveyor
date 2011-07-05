@@ -5,10 +5,15 @@
 # but references them to its container.
 module Surveyor
   class Section < Container
-    class NoBaseValueError < ::StandardError; end
 
     def base_value
       raise NoBaseValueError, 'a Section has no base value'
+    end
+
+    # updates a base value with a new value, returning 
+    # the (possibly new) base value updated.
+    def update_field(base_value, value)
+      raise NoBaseValueError, 'a Section has no base value to update'
     end
 
   end

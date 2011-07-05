@@ -9,24 +9,10 @@ module Surveyor
     end
 
     def update(hash)
-      hash.each do |k,v|
-        case v
-        when Hash
-          self[k].update(v)
-        when Array
-          hob_array = self[k]
-          result_array = v.collecy do |item|
-            # item should be a hash
-            
-            
-            
-            
-            
-            
-            
-            self[k].update(v)
-        else
-        end
+      hash.each do |field,value|
+        element = @container.accepted_element_at(field)
+        raise UnknownFieldError, "#{@container.path_name}.#{field} does not exist" unless element
+        self[field] = element.update_field(self[field], value)
       end
     end
 

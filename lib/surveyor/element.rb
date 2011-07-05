@@ -25,5 +25,13 @@ module Surveyor
       ''
     end
 
+    # updates a base value with a new value, returning
+    # the (possibly new) base value updated.
+    def update_field(base_value, value)
+      # generally, elements contain string (except containers)
+      # so the new base value is the newly proposed value
+      raise InvalidFieldMatchError, "#{path_name} must be a String" unless value.is_a?(String)
+      value
+    end
   end
 end
