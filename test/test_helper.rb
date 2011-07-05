@@ -64,9 +64,12 @@ class ActiveSupport::TestCase
 
 
   def factory(sym, survey = nil, hvalues = nil)
-    raise ::StandardError, 'only hobs can be created' unless sym == :hob
-    survey ||= Surveyor::Parser.define(&SURVEY_BLOCK)
-    Surveyor::Hob.new(survey, hvalues)
+    if sym == :hob
+      survey ||= Surveyor::Parser.define(&SURVEY_BLOCK)
+      Surveyor::Hob.new(survey, hvalues)
+    elsif sym == :survey
+      Surveyor::Parser.define(&SURVEY_BLOCK)
+    end
   end
 
 end

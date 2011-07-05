@@ -8,6 +8,16 @@ module Surveyor
       @options = options
     end
 
+    # Name of the element within the survey
+    def path_name
+      @parent ? "#{@parent.path_name}.#{name}" : name
+    end
+
+    # the survey is the root of all containers
+    def survey
+      parent ? parent.survey : self
+    end
+
     # The default value that this element has when the survey
     # is instanciated (empty)
     def base_value
