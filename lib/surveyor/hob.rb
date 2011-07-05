@@ -19,6 +19,17 @@ module Surveyor
     def to_h
       @container.simple_out(self)
     end
+    # ActiveModel integration
+
+    include ActiveModel::Conversion
+    extend ActiveModel::Naming
+    extend ActiveModel::Translation
+    include ActiveModel::Validations
+
+    def persisted?
+      false
+    end
+
     private
 
     def eigenclass
