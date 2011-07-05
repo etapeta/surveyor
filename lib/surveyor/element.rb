@@ -1,5 +1,15 @@
 module Surveyor
   class Element
+    class HtmlCoder
+      include ActionView::Helpers::FormTagHelper
+
+      protected
+
+      def protect_against_forgery?
+        false
+      end
+    end
+
     attr_reader :name, :parent, :options
 
     def initialize(parent_element, name, options)
@@ -40,5 +50,9 @@ module Surveyor
       raise InvalidFieldMatchError, "#{path_name} must be a String" unless value.is_a?(String)
       value
     end
+
+    def emit_html(output, object, dom_namer, options)
+    end
+
   end
 end
