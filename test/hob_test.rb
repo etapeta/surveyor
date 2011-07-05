@@ -326,4 +326,15 @@ class HobTest < ActiveSupport::TestCase
     assert_equal 'finally', hob.last
   end
 
+  test "a hob's inner containers are hobs" do
+    assert_kind_of Surveyor::Hob, @hob.tournaments.grand_slam
+  end
+
+  test 'a hob can access its container element' do
+    grand_slam = @hob.tournaments.grand_slam
+    assert_kind_of Surveyor::Hob, @hob.tournaments.grand_slam
+    assert_equal 'grand_slam', grand_slam.container.name
+    assert_equal 'nested', grand_slam.container.survey.name
+  end
+
 end

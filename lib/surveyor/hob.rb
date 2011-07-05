@@ -1,5 +1,6 @@
 module Surveyor
   class Hob
+    attr_reader :container
 
     def initialize(container, hhash = nil)
       raise ValidSurveyError, 'must pass a not-null container' unless container
