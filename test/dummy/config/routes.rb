@@ -1,4 +1,5 @@
 Dummy::Application.routes.draw do
+  resources :hobs
   resources :nests
   resources :surveys
 
@@ -59,6 +60,6 @@ Dummy::Application.routes.draw do
   # Note: This route will make all actions in every controller accessible via GET requests.
   # match ':controller(/:action(/:id(.:format)))'
 
-  root :to => "nests#index"
+  root :to => "hobs#index"
 
 end

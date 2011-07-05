@@ -1,0 +1,14 @@
+<h1>HOBS</h1>
+
+<ul>
+  <% @surveys.each do |surv,nests| %>
+    <li><%= link_to surv.name, new_hob_path(:survey => surv.name) %></li>
+    <% unless nests.empty? %>
+      <ul>
+        <% nests.each do |nest| %>
+          <li><%= link_to nest.id, edit_hob_path(nest, :survey => surv.name) %></li>
+        <% end %>
+      </ul>
+    <% end %>
+  <% end %>
+</ul>
