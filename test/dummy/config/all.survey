@@ -23,3 +23,10 @@ end
 
 survey 'empty' do
 end
+
+survey 'simple' do
+  string 'claudio'
+  string 'sanda'
+  string 'laura'
+  string 'cristian'
+end
