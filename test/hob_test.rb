@@ -309,4 +309,21 @@ class HobTest < ActiveSupport::TestCase
     assert_equal 'del_potro', @hob.players[0].won_against[2].name
   end
 
+  test 'a hob can set and read its fields' do
+    hob = factory(:hob, Surveyor::Parser.define {
+      survey 'small' do
+        string 'first'
+        section 'body' do
+          string 'middle'
+        end
+        string 'last'
+      end
+    })
+
+    hob.first = 'one'
+    hob['last'] = 'finally'
+    assert_equal 'one', hob['first']
+    assert_equal 'finally', hob.last
+  end
+
 end

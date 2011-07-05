@@ -19,6 +19,15 @@ module Surveyor
     def to_h
       @container.simple_out(self)
     end
+
+    def [](field_name)
+      send(field_name)
+    end
+
+    def []=(field_name, value)
+      send("#{field_name}=", value)
+    end
+
     # ActiveModel integration
 
     include ActiveModel::Conversion
