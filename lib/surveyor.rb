@@ -1,5 +1,6 @@
 module Surveyor
 
+  require 'surveyor/exceptions'
   require 'surveyor/parser'
   require 'surveyor/element'
   require 'surveyor/container'
