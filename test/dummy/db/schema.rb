@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110629142941) do
+ActiveRecord::Schema.define(:version => 20110704072410) do
 
   create_table "nests", :force => true do |t|
     t.string   "name"
@@ -19,6 +19,7 @@ ActiveRecord::Schema.define(:version => 20110629142941) do
     t.string   "footer"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "survey_name"
   end
 
 end
