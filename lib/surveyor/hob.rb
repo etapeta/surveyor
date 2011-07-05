@@ -1,11 +1,11 @@
 module Surveyor
   class Hob
-    class ValidSurveyError < ::StandardError; end
 
-    def initialize(container, hhash = {})
+    def initialize(container, hhash = nil)
       raise ValidSurveyError, 'must pass a not-null container' unless container
       @container = container
       setup_interface_from(@container)
+      update(hhash) if hhash
     end
 
     def update(hash)
@@ -48,6 +48,9 @@ module Surveyor
           eigenclass.send :define_method, elem.name, lambda { instance_variable_get("@#{elem.name}") }
           eigenclass.send :define_method, "#{elem.name}=", lambda {|value| instance_variable_set("@#{elem.name}", value) }
           instance_variable_set("@#{elem.name}", elem.base_value)
+          if Surveyor::Sequence === elem
+            send(elem.name).send(:setup_interface_from, elem)
+          end
         end
       end
     end
