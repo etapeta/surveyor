@@ -20,3 +20,53 @@ ActiveRecord::Migrator.migrate File.expand_path("../dummy/db/migrate/", __FILE__
 
 # Load support files
 Dir["#{File.dirname(__FILE__)}/support/**/*.rb"].each { |f| require f }
+
+class ActiveSupport::TestCase
+
+  SURVEY_BLOCK = Proc.new do
+    survey 'nested' do
+      section 'football_roles' do
+        string 'goalkeeper'
+        string 'defender'
+        string 'midfielder'
+        string 'forward'
+      end
+      section 'tennis' do
+        sequence 'tournaments' do
+          string 'master'
+          sequence 'grand_slam' do
+            string 'open_usa'
+            string 'roland_garros'
+            string 'wimbledon'
+            string 'open_australia'
+          end
+          string 'foro_italico'
+        end
+        sequence 'champions' do
+          string 'bjorn_borg'
+          string 'rod_laver'
+          string 'john_mcenroe'
+          string 'boris_becker'
+          string 'roger_federer'
+          string 'rafael_nadal'
+        end
+        multiplier 'players' do
+          string 'name'
+          multiplier 'won_against' do
+            string 'name'
+            string 'tournament'
+            string 'when'
+          end
+        end
+      end
+    end
+  end
+
+
+  def factory(sym, survey = nil, hvalues = nil)
+    raise ::StandardError, 'only hobs can be created' unless sym == :hob
+    survey ||= Surveyor::Parser.define(&SURVEY_BLOCK)
+    Surveyor::Hob.new(survey, hvalues)
+  end
+
+end
