@@ -25,6 +25,13 @@ module Surveyor
       ''
     end
 
+    # generates a simple representation of the element's value
+    # i.e. hash, array or simple value
+    def simple_out(b_value)
+      # generally, elements contain string (except containers)
+      b_value
+    end
+
     # updates a base value with a new value, returning
     # the (possibly new) base value updated.
     def update_field(base_value, value)

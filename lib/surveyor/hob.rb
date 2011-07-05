@@ -16,6 +16,9 @@ module Surveyor
       end
     end
 
+    def to_h
+      @container.simple_out(self)
+    end
     private
 
     def eigenclass

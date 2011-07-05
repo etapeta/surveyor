@@ -12,6 +12,20 @@ module Surveyor
       []
     end
 
+    # generates a simple representation of the element's value
+    # i.e. hash, array or simple value
+    def simple_out(b_value)
+      # a multiplier generates an array of hashes from an array of hobs
+      b_value.collect do |b_item|
+        accepted_elements.inject(Hash[]) do |hash,elem|
+          if b_item.respond_to?(elem.name)
+            hash[elem.name] = elem.simple_out(b_item.send(elem.name))
+          end
+          hash
+        end
+      end
+    end
+
     # updates a base value with a new value, returning
     # the (possibly new) base value updated.
     def update_field(base_value, value)

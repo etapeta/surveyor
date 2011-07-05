@@ -23,8 +23,43 @@ class HobTest < ActiveSupport::TestCase
     assert_equal Hash["first"=>"a", "middle"=>"", "last"=>"z"], hob.to_h
   end
 
-  test "creation" do
-    assert_not_nil @hob
+  test 'a hob can be represented as a hash' do
+    assert_equal Hash[
+      'goalkeeper' => '',
+      'defender' => '',
+      'midfielder' => '',
+      'forward' => '',
+      'tournaments' => {
+        'master' => '',
+        'grand_slam' => {
+          'open_usa' => '',
+          'roland_garros' => '',
+          'wimbledon' => '',
+          'open_australia' => '',
+        },
+        'foro_italico' => '',
+      },
+      'champions' => {
+        'bjorn_borg' => '',
+        'rod_laver' => '',
+        'john_mcenroe' => '',
+        'boris_becker' => '',
+        'roger_federer' => '',
+        'rafael_nadal' => '',
+      },
+      'players' => [],
+    ], @hob.to_h
+
+    hob = factory(:hob, Surveyor::Parser.define {
+      survey 'small' do
+        string 'first'
+        section 'body' do
+          string 'middle'
+        end
+        string 'last'
+      end
+    })
+    assert_equal Hash["first"=>"", "middle"=>"", "last"=>""], hob.to_h
   end
 
   test 'generates an interface' do
