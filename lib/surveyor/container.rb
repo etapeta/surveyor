@@ -53,5 +53,29 @@ module Surveyor
       end
       nil
     end
+
+    class HtmlCoder < Surveyor::Element::HtmlCoder
+
+      def emit(output, object, dom_namer, options)
+        html_attrs = element.identifiable? ? { :id => dom_namer.id } : {}
+        output.safe_concat(tag('div', html_attrs.merge({:id => dom_namer.id}), true))
+        output.safe_concat "<h2>#{element.label}</h2>"  # TODO: if label required
+        element.elements.each do |elem|
+          if elem.identifiable?
+            elem.html_coder.emit(output, object.send(elem.name), dom_namer + elem, elem.options)
+          else
+            elem.html_coder.emit(output, object, dom_namer, elem.options)
+          end
+        end
+        output.safe_concat("</div>")
+      end
+
+    end
+
+    # create a html expert that represents object as an element in HTML.
+    def html_coder
+      HtmlCoder.new(self)
+    end
+
   end
 end
