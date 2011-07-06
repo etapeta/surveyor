@@ -30,3 +30,19 @@ survey 'simple' do
   string 'laura'
   string 'cristian'
 end
+
+survey 'sectioned' do
+  section 'automobili' do
+    string 'ferrari'
+    string 'lamborghini'
+  end
+  section 'sports' do
+    string 'football'
+    string 'soccer'
+    string 'basket'
+  end
+  section 'furniture' do
+    string 'chair'
+    string 'table'
+  end
+end

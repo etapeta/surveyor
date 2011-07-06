@@ -28,7 +28,7 @@ class HobsController < ApplicationController
   # POST /nests.xml
   def create
     @hob = Surveyor::Hob.new(@survey)
-    @hob.update(params[:hob])
+    @hob.update(params[@survey.name])
     nest = Nest.new(:survey_name => @survey.name)
     nest.document = @hob.to_h
     nest.save!
@@ -37,16 +37,16 @@ class HobsController < ApplicationController
 
   # GET /nests/1/edit
   def edit
-    @nest = Nest.find(params[:nest_id])
+    @nest = Nest.find(params[:id])
     @hob = Surveyor::Hob.new(@survey, @nest.document)
   end
 
   # PUT /nests/1
   # PUT /nests/1.xml
   def update
-    @nest = Nest.find(params[:nest_id])
+    @nest = Nest.find(params[:id])
     @hob = Surveyor::Hob.new(@survey, @nest.document)
-    @hob.update(params[:hob])
+    @hob.update(params[@survey.name])
     @nest.document = @hob.to_h
     @nest.save!
     redirect_to hobs_path
