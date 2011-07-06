@@ -43,12 +43,13 @@ module Surveyor
       end
 
       def emit(output, object, dom_namer, options)
-        output.safe_concat(tag('div', {:class => 'survey', :id => dom_namer.id}, true))
+        output.safe_concat(tag('div', {:class => element.type, :id => dom_namer.id}, true))
+        # TODO: title for survey?
         element.elements.each do |elem|
-          if Section === elem
-            elem.html_coder.emit(output, object, dom_namer, elem.options)
-          else
+          if elem.identifiable?
             elem.html_coder.emit(output, object.send(elem.name), dom_namer + elem, elem.options)
+          else
+            elem.html_coder.emit(output, object, dom_namer, elem.options)
           end
         end
         output.safe_concat("</div>")

@@ -95,5 +95,10 @@ module Surveyor
       value
     end
 
+    # an element is identifiable if it needs an id in HTML rendering
+    def identifiable?
+      true
+    end
+
   end
 end

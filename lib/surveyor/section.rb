@@ -33,5 +33,10 @@ module Surveyor
       HtmlCoder.new(self)
     end
 
+    # an element is identifiable if it needs an id in HTML rendering
+    def identifiable?
+      false
+    end
+
   end
 end

@@ -50,17 +50,16 @@ module Surveyor
 
     def setup_interface_from(container)
       container.elements.each do |elem|
-        case elem
-        when Surveyor::Section
-          # section elements belongs to section's container, not to section
-          setup_interface_from(elem)
-        else # element or container (except multipliers)
+        if elem.identifiable?
           eigenclass.send :define_method, elem.name, lambda { instance_variable_get("@#{elem.name}") }
           eigenclass.send :define_method, "#{elem.name}=", lambda {|value| instance_variable_set("@#{elem.name}", value) }
           instance_variable_set("@#{elem.name}", elem.base_value)
           if Surveyor::Sequence === elem
             send(elem.name).send(:setup_interface_from, elem)
           end
+        else
+          # section elements belongs to section's container, not to section
+          setup_interface_from(elem)
         end
       end
     end

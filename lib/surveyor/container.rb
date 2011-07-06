@@ -38,14 +38,14 @@ module Surveyor
 
     # all directly accessible elements of the container
     def accepted_elements
-      elements.collect {|elem| elem.is_a?(Section) ? elem.accepted_elements : elem }.flatten
+      elements.collect {|elem| elem.identifiable? ? elem: elem.accepted_elements }.flatten
     end
 
     # finds the element that matches the field
     def accepted_element_at(field)
       elements.each do |elem|
         return elem if elem.name == field
-        if elem.is_a?(Section)
+        unless elem.identifiable?
           # section elements are accessible directly from its container
           result = elem.accepted_element_at(field)
           return result if result
