@@ -46,3 +46,17 @@ survey 'sectioned' do
     string 'table'
   end
 end
+
+survey 'sequenced' do
+  string 'title'
+  sequence 'sports' do
+    string 'football'
+    string 'soccer'
+    string 'basket'
+  end
+  sequence 'champions' do
+    string 'jordan'
+    string 'james'
+    string 'briant'
+  end
+end
