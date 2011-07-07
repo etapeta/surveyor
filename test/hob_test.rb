@@ -337,4 +337,17 @@ class HobTest < ActiveSupport::TestCase
     assert_equal 'nested', grand_slam.container.survey.name
   end
 
+  test 'hobs can be initialized from any container (except sections?)' do
+    survey = Surveyor::Parser.define do
+      survey 'mult' do
+        multiplier 'many' do
+          string 'one'
+          string 'two'
+        end
+      end
+    end
+    hob = Surveyor::Hob.new(survey.find('many'))
+    assert_equal({ 'one' => '', 'two' => '' }, hob.to_h)
+  end
+
 end

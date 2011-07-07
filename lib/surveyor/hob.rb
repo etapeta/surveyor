@@ -17,8 +17,16 @@ module Surveyor
       end
     end
 
+    # generate a hash of data for the hob
+    # if the container is a Multiplier, the hob represents one of its factors.
+    # Note that generally the container of a hob cannot be a multiplier.
+    # But in special cases, a hob should represent a multiplier's factor.
     def to_h
-      @container.simple_out(self)
+      if @container.is_a?(Multiplier)
+        @container.simple_out([self]).first
+      else
+        @container.simple_out(self)
+      end
     end
 
     def [](field_name)

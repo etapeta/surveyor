@@ -17,4 +17,15 @@ class SurveyTest < ActiveSupport::TestCase
     assert_same @survey, wimbledon.survey
   end
 
+  test 'a survey can contain a multiplier' do
+    survey = Surveyor::Parser.define do
+      survey 'mult' do
+        multiplier 'many' do
+          string 'one'
+          string 'two'
+        end
+      end
+    end
+  end
+
 end
