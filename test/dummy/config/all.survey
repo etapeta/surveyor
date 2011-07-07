@@ -60,3 +60,21 @@ survey 'sequenced' do
     string 'briant'
   end
 end
+
+survey 'multiplied' do
+  string 'title'
+  multiplier 'sports' do
+    string 'football'
+    string 'soccer'
+    string 'basket'
+  end
+  multiplier 'champions' do
+    string 'jordan'
+    multiplier 'miami' do
+      string 'james'
+      string 'wade'
+      string 'bosh'
+    end
+    string 'briant'
+  end
+end

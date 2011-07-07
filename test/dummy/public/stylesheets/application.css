@@ -8,3 +8,14 @@ label {
 }
 .surv-block .string {
 }
+#templates_multiplied div.survey {
+}
+.factor {
+  margin: 1px;
+  padding: 0 5px 0 5px;
+  border: thin solid grey;
+}
+.surv-container {
+  padding-left: 5px;
+  background-color: #EEE;
+}

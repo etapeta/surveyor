@@ -19,20 +19,37 @@ module Surveyor
       def emit(output, object, dom_namer, options)
         # create the frame and the label, and let every element
         # to emit its own widget
-        output.safe_concat tag('div', { :class => 'surv-block' }, true)
-        # label
-        output.safe_concat content_tag('label', element.label, { :for => dom_namer.id })
-        # encapsulate the widget in a div
-        output.safe_concat tag('div', { :class => element.type }, true)
-        emit_widget output, object, dom_namer, options
-        output.safe_concat "</div>"
-        output.safe_concat "</div>"
+        emit_tag(output, 'div', :class => 'surv-block') do |output|
+          emit_tag(output, 'label', element.label, :for => dom_namer.id)
+          emit_tag(output, 'div', :class => element.type) do |output|
+            emit_widget output, object, dom_namer, options
+          end
+        end
+      end
+
+      def emit_templates(output, dom_namer)
+        # only multipliers emit templates
       end
 
       protected
 
       def emit_widget(output, object, dom_namer, options)
-        raise ImplementedBySubclassError, 'must be implemented by subclass'
+        raise ImplementedBySubclassError, "must be implemented by subclass [#{element.class.name}]"
+      end
+
+      def emit_tag(output, tag_name, content_or_attributes = nil, attributes = nil, &block)
+        if block
+          raise TooMuchContentError, 'cannot have content and block' if attributes
+          output.safe_concat tag(tag_name, content_or_attributes, true)
+          block.call(output)
+          output.safe_concat "</#{tag_name}>"
+        elsif content_or_attributes.is_a?(Hash)
+          # simple tag
+          output.safe_concat tag(tag_name, content_or_attributes)
+        else
+          # tag with content
+          output.safe_concat content_tag(tag_name, content_or_attributes, attributes || {})
+        end
       end
 
       def protect_against_forgery?
@@ -46,6 +63,10 @@ module Surveyor
       @parent = parent_element
       @name = name
       @options = options
+    end
+
+    def clone(parent_element)
+      self.class.new(parent_element, name, options)
     end
 
     # type of element.

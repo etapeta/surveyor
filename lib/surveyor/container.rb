@@ -1,10 +1,46 @@
 module Surveyor
   class Container < Element
+    class HtmlCoder < Surveyor::Element::HtmlCoder
+
+      def emit(output, object, dom_namer, options)
+        html_attrs = element.identifiable? ? { :id => dom_namer.id } : {}
+        emit_tag(output, 'div', html_attrs.merge({:class => "surv-container #{element.type}"})) do |output|
+          emit_tag(output, 'h2', element.label) unless element.options[:no_label]
+          element.elements.each do |elem|
+            if elem.identifiable?
+              elem.html_coder.emit(output, object.send(elem.name), dom_namer + elem, elem.options)
+            else
+              elem.html_coder.emit(output, object, dom_namer, elem.options)
+            end
+          end
+        end
+      end
+
+      def emit_templates(output, dom_namer)
+        element.elements.each do |elem|
+          if elem.identifiable?
+            elem.html_coder.emit_templates output, dom_namer + elem
+          else
+            elem.html_coder.emit_templates output, dom_namer
+          end
+        end
+      end
+
+    end
+
     attr_reader :elements
 
     def initialize(parent_element, name, options)
       super(parent_element, name, options)
       @elements = []
+    end
+
+    def clone(parent_element)
+      result = self.class.new(parent_element, name, options)
+      elements.each do |elem|
+        result.elements << elem.clone(result)
+      end
+      result
     end
 
     # The default value that this element has when the survey
@@ -52,24 +88,6 @@ module Surveyor
         end
       end
       nil
-    end
-
-    class HtmlCoder < Surveyor::Element::HtmlCoder
-
-      def emit(output, object, dom_namer, options)
-        html_attrs = element.identifiable? ? { :id => dom_namer.id } : {}
-        output.safe_concat(tag('div', html_attrs.merge({:id => dom_namer.id}), true))
-        output.safe_concat "<h2>#{element.label}</h2>"  # TODO: if label required
-        element.elements.each do |elem|
-          if elem.identifiable?
-            elem.html_coder.emit(output, object.send(elem.name), dom_namer + elem, elem.options)
-          else
-            elem.html_coder.emit(output, object, dom_namer, elem.options)
-          end
-        end
-        output.safe_concat("</div>")
-      end
-
     end
 
     # create a html expert that represents object as an element in HTML.

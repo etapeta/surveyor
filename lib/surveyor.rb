@@ -12,5 +12,5 @@ module Surveyor
   require 'surveyor/survey'
   require 'surveyor/hob'
   # require 'surveyor/'
- 
+
 end

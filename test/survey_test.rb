@@ -37,4 +37,28 @@ class SurveyTest < ActiveSupport::TestCase
     end
   end
 
+  test 'an element can be cloned' do
+    survey = factory(:survey)
+
+    string_elem = survey.find('football_roles.goalkeeper')
+    string_clone = string_elem.clone(nil)
+    assert_equal 'goalkeeper', string_clone.name
+    assert_nil string_clone.parent
+    assert_equal string_elem.options, string_clone.options
+    assert_equal 'goalkeeper', string_clone.path_name
+
+    section_elem = survey.find('football_roles')
+    section_clone = section_elem.clone(nil)
+    assert_equal 'football_roles', section_clone.name
+    assert_equal section_elem.options, section_clone.options
+    assert_nil section_clone.parent
+    assert_equal 'football_roles', section_clone.path_name
+
+    surv_clone = survey.clone(nil)
+    assert_equal 'nested', surv_clone.name
+    assert_nil surv_clone.parent
+    assert_equal survey.options, surv_clone.options
+    assert_equal 'nested', surv_clone.path_name
+  end
+
 end

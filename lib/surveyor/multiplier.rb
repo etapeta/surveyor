@@ -1,12 +1,73 @@
 module Surveyor
   class Multiplier < Container
+    class HtmlCoder < Surveyor::Container::HtmlCoder
+      include ActionView::Helpers::JavaScriptHelper
+
+      def emit(output, object, dom_namer, options)
+        raise InvalidFieldMatchError, 'object must be an array' unless object.is_a?(Array)
+        # container div
+        emit_tag(output, 'div',
+          :id => dom_namer.id, :class => element.type, 'data-name' => dom_namer.name) do |output|
+          # label for whole multiplier
+          emit_tag output, 'h2', element.label unless element.options[:no_label]
+          # existing elements
+          object.each_with_index do |obj, idx|
+            emit_tag(output, 'div', :class => 'factor', :id => "#{dom_namer.id}_#{idx}") do |output|
+              mult_namer = dom_namer * idx
+              element.elements.each do |elem|
+                if elem.identifiable?
+                  elem.html_coder.emit(output, obj.send(elem.name), mult_namer + elem, elem.options)
+                else
+                  elem.html_coder.emit(output, obj, mult_namer, elem.options)
+                end
+              end
+              emit_tag output, 'div', :class => 'mult_remover' do
+                output << link_to_function(Multiplier.action_labels[:remove], 'removeFactor(this)')
+              end
+            end
+          end
+          # multiplier link
+          emit_tag output, 'div', :class => 'actions' do
+            output << link_to_function(Multiplier.action_labels[:add],
+              "addFactor('templ_#{element.path_name.gsub('.','__')}', this)")
+          end
+        end
+      end
+
+      def emit_templates(output, dom_namer)
+        # render the template with special prefix
+        emit_tag output, 'div', :id => "templ_#{element.path_name.gsub('.','__')}" do
+          tmp_surv = Survey.clone_for_factor(element)
+          tmp_surv.html_coder.emit(output,
+            Hob.new(tmp_surv),
+            DomNamer.new(":prefix:", ":prefix:"),
+            tmp_surv.options)
+        end
+        # continue searching other templates
+        element.elements.each do |elem|
+          if elem.identifiable?
+            elem.html_coder.emit_templates output, dom_namer + elem
+          else
+            elem.html_coder.emit_templates output, dom_namer
+          end
+        end
+      end
+
+    end
+
+    def self.action_labels
+      {   # TODO: from I18n
+        :add => 'Add',
+        :remove => 'Remove'
+      }
+    end
 
     # The default value that this element has when the survey
     # is instanciated (empty).
     #
     # Since this element resembles an ordered list of hashes,
     # the base element is an empty list. At runtime, the list
-    # will be filled with hobs (that will be initialized with 
+    # will be filled with hobs (that will be initialized with
     # the elements of this container).
     def base_value
       []
@@ -57,6 +118,11 @@ module Surveyor
         end
       end
       base_value
+    end
+
+    # create a html expert that represents object as an element in HTML.
+    def html_coder
+      HtmlCoder.new(self)
     end
 
   end

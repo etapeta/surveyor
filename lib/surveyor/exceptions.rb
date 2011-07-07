@@ -5,4 +5,6 @@ module Surveyor
   class UnknownFieldError < ::StandardError; end
   class SmallerArrayError < ::StandardError; end
   class ImplementedBySubclassError < ::StandardError; end
+  class TooMuchContentError < ::StandardError; end
+  class WrongParentError < ::StandardError; end
 end
