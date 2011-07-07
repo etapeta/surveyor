@@ -77,5 +77,15 @@ module Surveyor
       HtmlCoder.new(self)
     end
 
+    # finds an inner element by path
+    def find(path)
+      if path.is_a?(String)
+        find path.split('.')
+      else
+        elem = elements.detect {|elem| elem.name == path[0]}
+        elem.nil? ? nil : path.size == 1 ? elem : elem.find(path[1..-1])
+      end
+    end
+
   end
 end
