@@ -13,9 +13,10 @@ When associated to an object (which contains data), a survey can be rendered, an
 The result of the editing of a survey rendering is a hierarchical Hash.
 
 Three object types can be associated to a survey:
-- Surveyor::Hob: typical survey object, it is built on a survey and maps to and from a hierarchical Hash
-- ActiveRecord: as long as survey's elements are mapped on fields and relationships
-- Document: from a document-based or key-value database, like CouchDb, MongoDb or Redis
+- Surveyor::Hob: typical survey object, it is built on a survey and maps to 
+  and from a hierarchical Hash;
+- ActiveRecord: as long as survey's elements are mapped on fields and relationships;
+- Document: from a document-based or key-value database, like CouchDb, MongoDb or Redis.
 
 A survey can be rendered totally or partially (based on a survey sheet, see later).
 The object associated is updated accordingly.
@@ -23,7 +24,7 @@ The object associated is updated accordingly.
 Any surveyor element has a name, a label, a type and a set of options.
 
 A survey is internationalized (I18n) by design, since element names must be lowercase identifiers.
-That allow the element's label to be automatically calculated.
+That allow the element's label to be automatically calculated, based on current language.
 An element can override the default label calculation through the :label option.
 
 A survey element can have a tip, that is an help text that can be variously rendered
@@ -145,14 +146,14 @@ Possible simple element types:
     :is_number, # also with :regexp => /\d*/
     [:match, 'age', :greater_than],   #different from another field
 
-- feature: a survey can have a further mode, :design, that lets the user change
+[feature] a survey can have a further mode, :design, that lets the user change
   the survey structure.
 
-- feature: if a survey can be changed dynamically (see :design mode), it needs 
+[feature] if a survey can be changed dynamically (see :design mode), it needs 
   to be stored somewhere. Although it would be easier in a document-based or
   a key-value database, a classic choice is a relational database (ActiveRecord)
 
-- feature: apply a survey on an object. Path changes depending on the object being
+[feature] apply a survey on an object. Path changes depending on the object being
   an ActiveRecord or else.
 
   Information must be applied hierarchically (so in ActiveRecord it handles relationships)
@@ -161,7 +162,7 @@ Possible simple element types:
     <%= @survey.form_for(Blog.new) %>
     <!-- with access to blog.posts and blog.posts[].user -->
 
-- feature: a survey can be nested within a form.
+[feature] a survey can be nested within a form.
 
   For example, an object, among other regular attributes, could have an attribute
   marked as :serializable which may contain a Hob and is best rendered through a survey.
@@ -176,18 +177,20 @@ Possible simple element types:
 
   With this feature, error messages and error field localizations will be hard.
 
-- feature: a survey can be applied a survey sheet.
+[feature] a survey can be applied a survey sheet.
 
   Since a complex form like a survey is often used in a workflow, where in
   any node a different profile can access the same form, a survey profile
   can externally hold some survey :hiding and :editing rules and apply
   them over the survey when requested.
 
-- feature: 
+[feature] a survey is often used as an exam or quiz, expecting some results.
+
+  Enhance the survey features to manage quizzes as well.
 
 ------
 
-TO DO LIST
+== TO DO LIST
 - use "render" name for rendering of html coder (or renderer)
 - validation rules on element names
 - :length option for string element
@@ -223,5 +226,7 @@ TO DO LIST
 - slider element
 - spinner element
 - multiple surveys in the same page
+
+====
 
 *** That's all, folks! ***
