@@ -167,6 +167,7 @@ Information must be applied hierarchically (so in ActiveRecord it handles relati
 Es:
   <%= @survey.form_for(Blog.new) %>
   <!-- with access to blog.posts and blog.posts[].user -->
+.
 
 [feature] 
 
