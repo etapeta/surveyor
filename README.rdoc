@@ -111,7 +111,7 @@ Possible simple element types:
 * slider
 * spinner
 
-- a Hob
+[Hob] A Hob:
   * is an prototypical object that holds a survey status;
   * it accepts a survey in constructor, dynamically extending its protocol
     to provide access to all survey fields;
@@ -126,7 +126,7 @@ Possible simple element types:
       def to_hash(except_keys = []) ... end   # generate a hhash from a hob
     end
 
-- Thoughts about rules.
+[Thoughts about rules]
 
   A rule can be a block, a symbol or an array of constants.
 
@@ -146,47 +146,57 @@ Possible simple element types:
     :is_number, # also with :regexp => /\d*/
     [:match, 'age', :greater_than],   #different from another field
 
-[feature] a survey can have a further mode, :design, that lets the user change
+[feature]
+
+  a survey can have a further mode, :design, that lets the user change
   the survey structure.
 
-[feature] if a survey can be changed dynamically (see :design mode), it needs 
+[feature] 
+
+  if a survey can be changed dynamically (see :design mode), it needs 
   to be stored somewhere. Although it would be easier in a document-based or
   a key-value database, a classic choice is a relational database (ActiveRecord)
 
-[feature] apply a survey on an object. Path changes depending on the object being
-  an ActiveRecord or else.
+[feature] 
 
-  Information must be applied hierarchically (so in ActiveRecord it handles relationships)
+apply a survey on an object. Path changes depending on the object being
+an ActiveRecord or else.
 
-  Es:
-    <%= @survey.form_for(Blog.new) %>
-    <!-- with access to blog.posts and blog.posts[].user -->
+Information must be applied hierarchically (so in ActiveRecord it handles relationships)
 
-[feature] a survey can be nested within a form.
+Es:
+  <%= @survey.form_for(Blog.new) %>
+  <!-- with access to blog.posts and blog.posts[].user -->
 
-  For example, an object, among other regular attributes, could have an attribute
-  marked as :serializable which may contain a Hob and is best rendered through a survey.
+[feature] 
 
-  In this case, the editing form should resemble:
+a survey can be nested within a form.
 
-    <%= form_for(@obj) do |f| %>
-      <%= f.text_field 'header' %>
-      <%= @obj.survey.form_for(@obj.document, :without => :form) %>
-      <%= f.text_field 'footer' %>
-    <% end %>
+For example, an object, among other regular attributes, could have an attribute
+marked as :serializable which may contain a Hob and is best rendered through a survey.
 
-  With this feature, error messages and error field localizations will be hard.
+In this case, the editing form should resemble:
 
-[feature] a survey can be applied a survey sheet.
+  <%= form_for(@obj) do |f| %>
+    <%= f.text_field 'header' %>
+    <%= @obj.survey.form_for(@obj.document, :without => :form) %>
+    <%= f.text_field 'footer' %>
+  <% end %>
 
-  Since a complex form like a survey is often used in a workflow, where in
-  any node a different profile can access the same form, a survey profile
-  can externally hold some survey :hiding and :editing rules and apply
-  them over the survey when requested.
+With this feature, error messages and error field localizations will be hard.
 
-[feature] a survey is often used as an exam or quiz, expecting some results.
+[feature] 
+a survey can be applied a survey sheet.
 
-  Enhance the survey features to manage quizzes as well.
+Since a complex form like a survey is often used in a workflow, where in
+any node a different profile can access the same form, a survey profile
+can externally hold some survey :hiding and :editing rules and apply
+them over the survey when requested.
+
+[feature] 
+a survey is often used as an exam or quiz, expecting some results.
+
+Enhance the survey features to manage quizzes as well.
 
 ------
 
