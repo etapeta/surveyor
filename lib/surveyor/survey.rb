@@ -1,10 +1,10 @@
 module Surveyor
   class Survey < Section
-    class HtmlCoder < Surveyor::Container::HtmlCoder
+    class HtmlRenderer < Surveyor::Container::HtmlRenderer
       include ActionView::Helpers::FormTagHelper
       include ActionView::Helpers::JavaScriptHelper
 
-      def emit_form(object, url, options)
+      def render_form(object, url, options)
         singular = ActiveModel::Naming.singular(object)
         html_options = {}
         if object.respond_to?(:persisted?) && object.persisted?
@@ -29,7 +29,7 @@ module Surveyor
         dom_namer = DomNamer.new(element.name, options[:id] || element.name)
         output = ActiveSupport::SafeBuffer.new
         output.safe_concat(form_tag_html(html_options))
-        emit(output, object, dom_namer, options)
+        render(output, object, dom_namer, options)
 
         # submit button
         action = 'Submit'
@@ -46,7 +46,7 @@ module Surveyor
           emit_tag output, 'div', :class => 'mult_remover' do
             output << link_to_function(Multiplier.action_labels[:remove], 'removeFactor(this)')
           end
-          emit_templates output, DomNamer.new(element.name, options[:id] || element.name)
+          render_templates output, DomNamer.new(element.name, options[:id] || element.name)
         end
         output
       end
@@ -75,20 +75,20 @@ module Surveyor
     end
 
     # create a html expert that represents object as an element in HTML.
-    def html_coder
-      @html_coder ||= HtmlCoder.new(self)
+    def renderer
+      @renderer ||= HtmlRenderer.new(self)
     end
 
     def form_for(object, form_options = {})
       # TODO: form_options can contain elements which should be hidden or readonly
       opts = options.merge(form_options)
-      html_coder.emit_form(object, form_options[:url], opts) + html_coder.wrap_templates(opts)
+      renderer.render_form(object, form_options[:url], opts) + renderer.wrap_templates(opts)
     end
 
     private
 
     def render_template(options)
-      html_coder.emit_templates(options)
+      renderer.render_templates(options)
     end
 
   end

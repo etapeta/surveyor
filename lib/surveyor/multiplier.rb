@@ -1,9 +1,9 @@
 module Surveyor
   class Multiplier < Container
-    class HtmlCoder < Surveyor::Container::HtmlCoder
+    class HtmlRenderer < Surveyor::Container::HtmlRenderer
       include ActionView::Helpers::JavaScriptHelper
 
-      def emit(output, object, dom_namer, options)
+      def render(output, object, dom_namer, options)
         raise InvalidFieldMatchError, 'object must be an array' unless object.is_a?(Array)
         # container div
         emit_tag(output, 'div',
@@ -16,9 +16,9 @@ module Surveyor
               mult_namer = dom_namer * idx
               element.elements.each do |elem|
                 if elem.identifiable?
-                  elem.html_coder.emit(output, obj.send(elem.name), mult_namer + elem, elem.options)
+                  elem.renderer.render(output, obj.send(elem.name), mult_namer + elem, elem.options)
                 else
-                  elem.html_coder.emit(output, obj, mult_namer, elem.options)
+                  elem.renderer.render(output, obj, mult_namer, elem.options)
                 end
               end
               emit_tag output, 'div', :class => 'mult_remover' do
@@ -34,11 +34,11 @@ module Surveyor
         end
       end
 
-      def emit_templates(output, dom_namer)
+      def render_templates(output, dom_namer)
         # render the template with special prefix
         emit_tag output, 'div', :id => "templ_#{element.path_name.gsub('.','__')}" do
           tmp_surv = Survey.clone_for_factor(element)
-          tmp_surv.html_coder.emit(output,
+          tmp_surv.renderer.render(output,
             Hob.new(tmp_surv),
             DomNamer.new(":prefix:", ":prefix:"),
             tmp_surv.options)
@@ -46,9 +46,9 @@ module Surveyor
         # continue searching other templates
         element.elements.each do |elem|
           if elem.identifiable?
-            elem.html_coder.emit_templates output, dom_namer + elem
+            elem.renderer.render_templates output, dom_namer + elem
           else
-            elem.html_coder.emit_templates output, dom_namer
+            elem.renderer.render_templates output, dom_namer
           end
         end
       end
@@ -121,8 +121,8 @@ module Surveyor
     end
 
     # create a html expert that represents object as an element in HTML.
-    def html_coder
-      HtmlCoder.new(self)
+    def renderer
+      HtmlRenderer.new(self)
     end
 
   end

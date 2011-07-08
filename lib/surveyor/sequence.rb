@@ -1,10 +1,10 @@
 module Surveyor
   class Sequence < Container
-    class HtmlCoder < Surveyor::Container::HtmlCoder
+    class HtmlRenderer < Surveyor::Container::HtmlRenderer
     end
 
-    def html_coder
-      HtmlCoder.new(self)
+    def renderer
+      HtmlRenderer.new(self)
     end
 
   end

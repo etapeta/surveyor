@@ -1,27 +1,27 @@
 module Surveyor
   class Container < Element
-    class HtmlCoder < Surveyor::Element::HtmlCoder
+    class HtmlRenderer < Surveyor::Element::HtmlRenderer
 
-      def emit(output, object, dom_namer, options)
+      def render(output, object, dom_namer, options)
         html_attrs = element.identifiable? ? { :id => dom_namer.id } : {}
         emit_tag(output, 'div', html_attrs.merge({:class => "surv-container #{element.type}"})) do |output|
           emit_tag(output, 'h2', element.label) unless element.options[:no_label]
           element.elements.each do |elem|
             if elem.identifiable?
-              elem.html_coder.emit(output, object.send(elem.name), dom_namer + elem, elem.options)
+              elem.renderer.render(output, object.send(elem.name), dom_namer + elem, elem.options)
             else
-              elem.html_coder.emit(output, object, dom_namer, elem.options)
+              elem.renderer.render(output, object, dom_namer, elem.options)
             end
           end
         end
       end
 
-      def emit_templates(output, dom_namer)
+      def render_templates(output, dom_namer)
         element.elements.each do |elem|
           if elem.identifiable?
-            elem.html_coder.emit_templates output, dom_namer + elem
+            elem.renderer.render_templates output, dom_namer + elem
           else
-            elem.html_coder.emit_templates output, dom_namer
+            elem.renderer.render_templates output, dom_namer
           end
         end
       end
@@ -91,8 +91,8 @@ module Surveyor
     end
 
     # create a html expert that represents object as an element in HTML.
-    def html_coder
-      HtmlCoder.new(self)
+    def renderer
+      HtmlRenderer.new(self)
     end
 
     # finds an inner element by path

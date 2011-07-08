@@ -5,12 +5,12 @@
 # but references them to its container.
 module Surveyor
   class Section < Container
-    class HtmlCoder < Surveyor::Container::HtmlCoder
-      def emit(output, object, dom_namer, options)
+    class HtmlRenderer < Surveyor::Container::HtmlRenderer
+      def render(output, object, dom_namer, options)
         emit_tag(output, 'div', :class => element.type) do |output|
           emit_tag(output, 'h2', element.label) unless element.options[:no_label]
           element.elements.each do |elem|
-            elem.html_coder.emit(output, object.send(elem.name), dom_namer + elem, elem.options)
+            elem.renderer.render(output, object.send(elem.name), dom_namer + elem, elem.options)
           end
         end
       end
@@ -26,8 +26,8 @@ module Surveyor
       raise NoBaseValueError, 'a Section has no base value to update'
     end
 
-    def html_coder
-      HtmlCoder.new(self)
+    def renderer
+      HtmlRenderer.new(self)
     end
 
     # an element is identifiable if it needs an id in HTML rendering

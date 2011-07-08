@@ -1,6 +1,6 @@
 module Surveyor
   class Element
-    class HtmlCoder
+    class HtmlRenderer
       include ActionView::Helpers::FormTagHelper
       attr_reader :element
 
@@ -8,7 +8,7 @@ module Surveyor
         @element = elem
       end
 
-      # Emits the HTML representation for an element
+      # Renders the element instance in HTML code
       # Standard frame:
       #   <p class='surv-block'>
       #     <label for="fieldid"/>
@@ -16,24 +16,24 @@ module Surveyor
       #       ...  # es: <input id="fieldid" name="fieldname"/>
       #     </div>
       #   </p>
-      def emit(output, object, dom_namer, options)
+      def render(output, object, dom_namer, options)
         # create the frame and the label, and let every element
-        # to emit its own widget
+        # to render its own widget
         emit_tag(output, 'div', :class => 'surv-block') do |output|
           emit_tag(output, 'label', element.label, :for => dom_namer.id)
           emit_tag(output, 'div', :class => element.type) do |output|
-            emit_widget output, object, dom_namer, options
+            render_widget output, object, dom_namer, options
           end
         end
       end
 
-      def emit_templates(output, dom_namer)
-        # only multipliers emit templates
+      def render_templates(output, dom_namer)
+        # only multipliers really render templates
       end
 
       protected
 
-      def emit_widget(output, object, dom_namer, options)
+      def render_widget(output, object, dom_namer, options)
         raise ImplementedBySubclassError, "must be implemented by subclass [#{element.class.name}]"
       end
 
