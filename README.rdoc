@@ -151,7 +151,7 @@ Possible simple element types:
   a survey can have a further mode, :design, that lets the user change
   the survey structure.
 
-[feature] 
+[feature]
 
   if a survey can be changed dynamically (see :design mode), it needs 
   to be stored somewhere. Although it would be easier in a document-based or
@@ -159,45 +159,44 @@ Possible simple element types:
 
 [feature] 
 
-apply a survey on an object. Path changes depending on the object being
-an ActiveRecord or else.
+  apply a survey on an object. Path changes depending on the object being
+  an ActiveRecord or else.
 
-Information must be applied hierarchically (so in ActiveRecord it handles relationships)
+  Information must be applied hierarchically (so in ActiveRecord it handles relationships)
 
-Es:
-  <%= @survey.form_for(Blog.new) %>
-  <!-- with access to blog.posts and blog.posts[].user -->
-.
-
-[feature] 
-
-a survey can be nested within a form.
-
-For example, an object, among other regular attributes, could have an attribute
-marked as :serializable which may contain a Hob and is best rendered through a survey.
-
-In this case, the editing form should resemble:
-
-  <%= form_for(@obj) do |f| %>
-    <%= f.text_field 'header' %>
-    <%= @obj.survey.form_for(@obj.document, :without => :form) %>
-    <%= f.text_field 'footer' %>
-  <% end %>
-
-With this feature, error messages and error field localizations will be hard.
+  Es:
+    <%= @survey.form_for(Blog.new) %>
+  with access to blog.posts and blog.posts[].user
 
 [feature] 
-a survey can be applied a survey sheet.
 
-Since a complex form like a survey is often used in a workflow, where in
-any node a different profile can access the same form, a survey profile
-can externally hold some survey :hiding and :editing rules and apply
-them over the survey when requested.
+  a survey can be nested within a form.
+
+  For example, an object, among other regular attributes, could have an attribute
+  marked as :serializable which may contain a Hob and is best rendered through a survey.
+
+  In this case, the editing form should resemble:
+
+    <%= form_for(@obj) do |f| %>
+      <%= f.text_field 'header' %>
+      <%= @obj.survey.form_for(@obj.document, :without => :form) %>
+      <%= f.text_field 'footer' %>
+    <% end %>
+
+  With this feature, error messages and error field localizations will be hard.
 
 [feature] 
-a survey is often used as an exam or quiz, expecting some results.
+  a survey can be applied a survey sheet.
 
-Enhance the survey features to manage quizzes as well.
+  Since a complex form like a survey is often used in a workflow, where in
+  any node a different profile can access the same form, a survey profile
+  can externally hold some survey :hiding and :editing rules and apply
+  them over the survey when requested.
+
+[feature] 
+  a survey is often used as an exam or quiz, expecting some results.
+
+  Enhance the survey features to manage quizzes as well.
 
 ------
 
