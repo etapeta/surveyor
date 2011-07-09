@@ -1,5 +1,5 @@
 module Surveyor
-  class Survey < Section
+  class Survey < Sequence
     class HtmlRenderer < Surveyor::Container::HtmlRenderer
       include ActionView::Helpers::FormTagHelper
       include ActionView::Helpers::JavaScriptHelper
