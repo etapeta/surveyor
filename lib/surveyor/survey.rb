@@ -5,37 +5,27 @@ module Surveyor
       include ActionView::Helpers::JavaScriptHelper
 
       def render_form(object, url, options)
-        singular = ActiveModel::Naming.singular(object)
-        html_options = {}
-        if object.respond_to?(:persisted?) && object.persisted?
-          {
-            :class  => "edit",
-            :id => options[:id] || ActionController::RecordIdentifier.dom_id(object, :edit),
-            :method => :put
-          }
-        else
-          {
-            :class  => "new",
-            :id => options[:id] || ActionController::RecordIdentifier.dom_id(object),
-            :method => :post
-          }
-        end
+        output = ActiveSupport::SafeBuffer.new
+
+        html_options = {
+          'action' => url,
+          'accept-charset' => "UTF-8",
+        }
         html_options['method'] = options[:method].to_s if options[:method]
         html_options[:enctype] = "multipart/form-data" if options[:multipart]
-        html_options[:action]  = url
-        html_options['accept-charset'] = "UTF-8"
         # html_options["data-remote"] = true if options["remote"]
-
-        dom_namer = DomNamer.new(element.name, options[:id] || element.name)
-        output = ActiveSupport::SafeBuffer.new
         output.safe_concat(form_tag_html(html_options))
-        render(output, object, dom_namer, options)
 
-        # submit button
-        action = 'Submit'
-        output.safe_concat("<div class='buttons'><input type='submit' class='button' value='#{action}'/></div>")
+        # render survey elements
+        render(output, object, DomNamer.start(element), options)
+
+        # render submit button
+        action = 'Submit' # TODO: I18n
+        emit_tag output, 'div', :class => 'buttons' do
+          emit_tag output, 'input', :type => 'submit', :class => 'button', :value => action
+        end
+
         output.safe_concat("</form>")
-
         output
       end
 
