@@ -1,6 +1,10 @@
 class DomNamer
   attr_reader :name, :id
 
+  def self.start(element)
+    new(element.name, element.options[:id] || element.name)
+  end
+
   def initialize(name, id)
     @name = name
     @id = id
