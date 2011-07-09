@@ -72,4 +72,10 @@ class ActiveSupport::TestCase
     end
   end
 
+  def assert_include(item, container, message = nil)
+    msg = "#{item.inspect} is not contained in #{container.inspect}"
+    msg = "#{message}\n#{msg}" if message
+    assert container.include?(item), msg
+  end
+
 end
