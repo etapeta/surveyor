@@ -69,7 +69,7 @@ module Surveyor
     # the base element is an empty list. At runtime, the list
     # will be filled with hobs (that will be initialized with
     # the elements of this container).
-    def base_value
+    def default_value
       []
     end
 
@@ -87,37 +87,42 @@ module Surveyor
       end
     end
 
-    # updates a base value with a new value, returning
-    # the (possibly new) base value updated.
-    def update_field(base_value, value)
-      # base value should be an array of hobs,
-      # while value should be an array of hashes
-      raise InvalidFieldMatchError, "#{path_name} must be an Array" unless value.is_a?(Array)
-      raise SmallerArrayError, "#{path_name} must be an Array with not less than #{base_value.size} items" if value.size < base_value.size
+    # updates current value with a new value, returning
+    # the current value updated.
+    #
+    # NOTE: For a multiplier, old_value should be an array of hobs,
+    # while new_partial_value should be an array of hashes
+    def update_field(current_value, new_partial_value)
+      unless new_partial_value.is_a?(Array)
+        raise InvalidFieldMatchError, "#{path_name} must be an Array"
+      end
+      if new_partial_value.size < current_value.size
+        raise SmallerArrayError, "#{path_name} must be an Array with not less than #{current_value.size} items"
+      end
       to_be_removed = []
-      (0...base_value.size).each do |idx|
+      (0...current_value.size).each do |idx|
         # TODO: manage deleted items
-        if value[idx]['deleted']
-          # puts "remove #{idx}th element: #{base_value[idx].inspect}"
+        if new_partial_value[idx]['deleted']
+          # puts "remove #{idx}th element: #{current_value[idx].inspect}"
           to_be_removed << idx
         else
-          base_value[idx].update(value[idx])
+          current_value[idx].update(new_partial_value[idx])
         end
       end
-      (base_value.size...value.size).each do |idx|
-        unless value[idx]['deleted']
+      (current_value.size...new_partial_value.size).each do |idx|
+        unless new_partial_value[idx]['deleted']
           hob = Hob.new(self)
-          hob.update(value[idx])
-          # puts "add #{base_value.size}th element: #{hob.inspect}"
-          base_value << hob
+          hob.update(new_partial_value[idx])
+          # puts "add #{current_value.size}th element: #{hob.inspect}"
+          current_value << hob
         end
       end
       unless to_be_removed.empty?
         to_be_removed.reverse.each do |idx|
-          base_value.delete_at(idx)
+          current_value.delete_at(idx)
         end
       end
-      base_value
+      current_value
     end
 
     # create a html expert that represents object as an element in HTML.

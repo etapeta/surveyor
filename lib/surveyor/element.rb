@@ -95,7 +95,7 @@ module Surveyor
 
     # The default value that this element has when the survey
     # is instanciated (empty)
-    def base_value
+    def default_value
       # generally, elements contain string (except containers)
       ''
     end
@@ -107,16 +107,20 @@ module Surveyor
       b_value
     end
 
-    # updates a base value with a new value, returning
-    # the (possibly new) base value updated.
-    def update_field(base_value, value)
-      # generally, elements contain string (except containers)
-      # so the new base value is the newly proposed value
-      raise InvalidFieldMatchError, "#{path_name} must be a String" unless value.is_a?(String)
-      value
+    # updates current value with a new value, returning
+    # the current value updated.
+    #
+    # NOTE: Consider that the new value can be a partial value,
+    # so it is not intended to replace the current value but only
+    # to update it.
+    # Besides, the new value is always a simple value (string, hash, array)
+    # while the old value could be a higher structure (depending on the element).
+    def update_field(current_value, new_partial_value)
+      raise ImplementedBySubclassError, "must be implemented by subclass [#{element.class.name}]"
     end
 
-    # an element is identifiable if it needs an id in HTML rendering
+    # an element is identifiable if it needs an id in HTML rendering.
+    # Generally, all elements are identifiable except sections.
     def identifiable?
       true
     end

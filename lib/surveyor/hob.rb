@@ -61,7 +61,7 @@ module Surveyor
         if elem.identifiable?
           eigenclass.send :define_method, elem.name, lambda { instance_variable_get("@#{elem.name}") }
           eigenclass.send :define_method, "#{elem.name}=", lambda {|value| instance_variable_set("@#{elem.name}", value) }
-          instance_variable_set("@#{elem.name}", elem.base_value)
+          instance_variable_set("@#{elem.name}", elem.default_value)
           if Surveyor::Sequence === elem
             send(elem.name).send(:setup_interface_from, elem)
           end

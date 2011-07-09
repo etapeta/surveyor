@@ -16,14 +16,14 @@ module Surveyor
       end
     end
 
-    def base_value
-      raise NoBaseValueError, 'a Section has no base value'
+    def default_value
+      raise NoBaseValueError, 'a Section has no default value'
     end
 
-    # updates a base value with a new value, returning
-    # the (possibly new) base value updated.
-    def update_field(base_value, value)
-      raise NoBaseValueError, 'a Section has no base value to update'
+    # updates current value with a new value, returning
+    # the current value updated.
+    def update_field(current_value, new_partial_value)
+      raise NoBaseValueError, 'a Section has no value to update'
     end
 
     def renderer

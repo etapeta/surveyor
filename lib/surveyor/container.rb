@@ -47,17 +47,17 @@ module Surveyor
     # is instanciated (empty)
     # Since this element resembles an ordered hash, with
     # keys being element names, it has a hob as base value.
-    def base_value
+    def default_value
       Hob.new(self)
     end
 
-    # updates a base value with a new value, returning
-    # the (possibly new) base value updated.
-    def update_field(b_value, value)
-      raise InvalidFieldMatchError, "#{path_name} must be a Hash" unless value.is_a?(Hash)
+    # updates current value with a new value, returning
+    # the current value updated.
+    def update_field(current_value, new_partial_value)
+      raise InvalidFieldMatchError, "#{path_name} must be a Hash" unless new_partial_value.is_a?(Hash)
       # b_value must be a Hob, and it can be updated with a hash
-      b_value.update(value)
-      b_value
+      current_value.update(new_partial_value)
+      current_value
     end
 
     # generates a simple representation of the element's value
