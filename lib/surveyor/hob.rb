@@ -119,6 +119,12 @@ module Surveyor
       errors[k] << "survey.errors.#{error_symbol}"
     end
 
+    def inspect
+      self.class.name + "<#{container.type}>" + "{" + container.accepted_elements.collect {|e|
+        e.name + ":" + (e.is_a?(Container) ? "...": self.send(e.name).inspect)
+      }.join(',') + "}"
+    end
+
     private
 
     def eigenclass

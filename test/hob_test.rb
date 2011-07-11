@@ -475,4 +475,8 @@ class HobTest < ActiveSupport::TestCase
     assert_include "« Mixed | Primus » : can't be blank", hob.errors.full_messages
   end
 
+  test 'a hob can be inspected' do
+    assert_equal 'Surveyor::Hob<survey>{goalkeeper:"",defender:"",midfielder:"",forward:"",tournaments:...,champions:...,players:...}', @hob.inspect
+  end
+
 end
