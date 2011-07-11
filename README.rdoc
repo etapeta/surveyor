@@ -10,9 +10,10 @@ name.
 When associated to an object (which contains data), a survey can be rendered, and that
 (as current only option) generates a HTML form.
 
-The result of the editing of a survey rendering is a hierarchical Hash.
+The submission of a survey form is a hierarchical hash (i.e. a hash without complex objects,
+only simple values, hashes and arrays. Ex: params[:form]).
 
-Three object types can be associated to a survey:
+Three object types could be associated to a survey:
 - Surveyor::Hob: typical survey object, it is built on a survey and maps to
   and from a hierarchical Hash;
 - ActiveRecord: as long as survey's elements are mapped on fields and relationships;
@@ -44,7 +45,7 @@ The simplest survey element is the string element, that allows for editing textu
 on a single line. Its content can also be validated on a regular expression (:regexp option).
 
 Any element of a survey (as well as the survey itself) can be rendered as read-only.
-This (as well as other rendering options, like obligatoriness and visibility) can
+This (as well as other rendering options, like mandatory-ness and visibility) can
 be specified in the options of an element or in a survey sheet.
 
 A survey sheet is a set of options for survey's elements that can be merged with a survey
@@ -66,7 +67,7 @@ these rules to be evaluated client-side (with limitations).
 Es: a choice element shows only a container among a set of containers depending
 on the chosen value.
 
-Some easy validation rules, like presence, could also be rendered in javascript
+Some easy validation rules, like presence, could also be rendered in javascript.
 
 The visibility rules, when actively implemented client-side, can be effectively
 used to build wizards.
@@ -74,7 +75,7 @@ used to build wizards.
 A survey can contain different types of containers:
 - a sequence contains a list of elements that are displayed sequentially.
 
-  The value of a sequence is an hash
+  The value of a sequence is a hash
 - a section is a simple field aggregator that contains a list of elements.
 
   It differs from a sequence in that it does not change its fields' names.
@@ -120,6 +121,7 @@ Possible simple element types:
     to provide access to all survey fields;
   * it can be partially or totally updated by a HHash;
   * it can output its representation as a HHash
+  * it behaves like an ActiveModel
   NOTE: A HHash is a hierarchical hash that can only contain strings, arrays
   or other HHashes. It is what generally comes from a form (i.e. params)
 
@@ -186,7 +188,8 @@ Possible simple element types:
       <%= f.text_field 'footer' %>
     <% end %>
 
-  With this feature, error messages and error field localizations will be hard.
+  With this feature, error messages and error field localizations will be hard to manage.
+  Better to delay it
 
 [feature]
   a survey can be applied a survey sheet.
