@@ -9,14 +9,14 @@ class HobAsActiveModelTest < ActiveSupport::TestCase
   end
 
 
-  test "model_name exposes singular and human name" do 
+  test "model_name exposes singular and human name" do
     assert_equal "surveyor_hob", model.class.model_name.singular
     assert_equal "Hob", model.class.model_name.human
   end
 
   test "model_name.human uses I18n" do
     begin
-      I18n.backend.store_translations :en, 
+      I18n.backend.store_translations :en,
         :activemodel => { :models => { :surveyor => { :hob => "A Sample Hob" } } }
       assert_equal "A Sample Hob", model.class.model_name.human
     ensure

@@ -455,7 +455,7 @@ class HobTest < ActiveSupport::TestCase
   end
 
   test 'hob errors can be customized' do
-    I18n.backend.store_translations :en, :survey => { 
+    I18n.backend.store_translations :en, :survey => {
       :path_separator => ' | ',
       :error_format => "« %{attribute} » : %{message}",
       :attributes => {

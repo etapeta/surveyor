@@ -1,4 +1,4 @@
-<%= @survey.form_for(@hob, 
-      :url => @nest ? url_for(:action => :update, :id => @nest.id, :survey => @survey.name) : 
-        url_for(:action => :create, :survey => @survey.name), 
+<%= @survey.form_for(@hob,
+      :url => @nest ? url_for(:action => :update, :id => @nest.id, :survey => @survey.name) :
+        url_for(:action => :create, :survey => @survey.name),
       :method => @nest ? :put : :post) %>
