@@ -82,8 +82,8 @@ module Surveyor
     end
 
     # all directly accessible elements of the container
-    def accepted_elements
-      elements.collect {|elem| elem.identifiable? ? elem: elem.accepted_elements }.flatten
+    def accepted_elements(recurse = false)
+      elements.collect {|elem| elem.identifiable? ? elem: elem.accepted_elements(true) }.flatten
     end
 
     # finds the element that matches the field

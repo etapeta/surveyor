@@ -20,6 +20,13 @@ module Surveyor
       raise NoBaseValueError, 'a Section has no default value'
     end
 
+    # all directly accessible elements of the container
+    # A section has no directly accessible element.
+    def accepted_elements(recurse = false)
+      return [] unless recurse
+      elements.collect {|elem| elem.identifiable? ? elem: elem.accepted_elements(true) }.flatten
+    end
+
     # updates current value with a new value, returning
     # the current value updated.
     def update_field(current_value, new_partial_value)
