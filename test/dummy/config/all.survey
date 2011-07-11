@@ -1,6 +1,6 @@
 survey 'nested' do
   section 'football_roles' do
-    string 'goalkeeper'
+    string 'goalkeeper', :required => true
     string 'defender'
     string 'midfielder'
     string 'forward'
@@ -69,7 +69,7 @@ survey 'multiplied' do
     string 'basket'
   end
   multiplier 'champions' do
-    string 'jordan'
+    string 'jordan', :required => true
     multiplier 'miami' do
       string 'james'
       string 'wade'

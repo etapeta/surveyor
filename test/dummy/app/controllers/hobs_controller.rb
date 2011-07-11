@@ -47,9 +47,13 @@ class HobsController < ApplicationController
     @nest = Nest.find(params[:id])
     @hob = Surveyor::Hob.new(@survey, @nest.document)
     @hob.update(params[@survey.name])
-    @nest.document = @hob.to_h
-    @nest.save!
-    redirect_to hobs_path
+    if @hob.valid?
+      @nest.document = @hob.to_h
+      @nest.save!
+      redirect_to hobs_path
+    else
+      render :action => :edit
+    end
   end
 
   private
