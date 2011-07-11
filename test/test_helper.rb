@@ -62,12 +62,70 @@ class ActiveSupport::TestCase
     end
   end
 
+  HOB_DATA = {
+    'goalkeeper' => 'zoff',
+    'defender' => 'cannavaro',
+    'midfielder' => 'pirlo',
+    'forward' => 'rossi',
+    'tournaments' => {
+      'master' => '2008',
+      'grand_slam' => {
+        'open_usa' => '2010',
+        'roland_garros' => '2011',
+        'wimbledon' => '2011',
+        'open_australia' => '2010'
+      },
+      'foro_italico' => '2011'
+    },
+    'champions' => {
+      'bjorn_borg' => 'the best',
+      'john_mcenroe' => 'the genius',
+      'roger_federer' => 'the perfection',
+      'rafael_nadal' => 'the grit'
+    },
+    'players' => [
+      {
+        'name' => 'federer',
+        'won_against' => [
+          {
+            'name' => 'nadal',
+            'tournament' => 'open usa',
+            'when' => '2007'
+          },
+          {
+            'name' => 'djokovic',
+            'tournament' => 'wimbledon',
+            'when' => '2010'
+          },
+        ]
+      },
+      {
+        'name' => 'nadal',
+        'won_against' => [
+          {
+            'name' => 'djokovic',
+            'tournament' => 'open usa',
+            'when' => '2010'
+          },
+          {
+            'name' => 'federer',
+            'tournament' => 'wimbledon',
+            'when' => '2010'
+          },
+        ]
+      },
+    ]
+  }
 
   def factory(sym, survey = nil, hvalues = nil)
-    if sym == :hob
+    case sym
+    when :hob
       survey ||= Surveyor::Parser.define(&SURVEY_BLOCK)
       Surveyor::Hob.new(survey, hvalues)
-    elsif sym == :survey
+    when :full_hob
+      survey ||= Surveyor::Parser.define(&SURVEY_BLOCK)
+      Surveyor::Hob.new(survey, HOB_DATA)
+    when :survey
       Surveyor::Parser.define(&SURVEY_BLOCK)
     end
   end
