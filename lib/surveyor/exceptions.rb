@@ -7,4 +7,5 @@ module Surveyor
   class ImplementedBySubclassError < ::StandardError; end
   class TooMuchContentError < ::StandardError; end
   class WrongParentError < ::StandardError; end
+  class CannotMultiplyError < ::StandardError; end
 end

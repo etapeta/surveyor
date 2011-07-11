@@ -2,6 +2,7 @@ module Surveyor
 
   require 'surveyor/exceptions'
   require 'surveyor/dom_namer'
+  require 'surveyor/object_stack'
   require 'surveyor/parser'
   require 'surveyor/element'
   require 'surveyor/container'
