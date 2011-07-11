@@ -10,6 +10,7 @@ module Surveyor
     end
 
     def update(hash)
+      errors.clear
       hash.each do |field,value|
         element = @container.accepted_element_at(field)
         raise UnknownFieldError, "#{@container.path_name}.#{field} does not exist" unless element
