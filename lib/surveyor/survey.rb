@@ -31,7 +31,7 @@ module Surveyor
         end
 
         # render survey elements
-        render(output, ObjectStack.new(object.container, object), options)
+        render(output, ObjectStack.new(object.container, object))
 
         # render submit button
         action = 'Submit' # TODO: I18n
@@ -87,12 +87,6 @@ module Surveyor
       # TODO: form_options can contain elements which should be hidden or readonly
       opts = options.merge(form_options)
       renderer.render_form(object, form_options[:url], opts) + renderer.wrap_templates(opts)
-    end
-
-    private
-
-    def render_template(options)
-      renderer.render_templates(options)
     end
 
   end

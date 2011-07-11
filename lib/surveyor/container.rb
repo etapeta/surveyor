@@ -2,15 +2,15 @@ module Surveyor
   class Container < Element
     class HtmlRenderer < Surveyor::Element::HtmlRenderer
 
-      def render(output, object_stack, options)
+      def render(output, object_stack)
         html_attrs = element.identifiable? ? { :id => object_stack.dom_id } : {}
         emit_tag(output, 'div', html_attrs.merge({:class => "surv-container #{element.type}"})) do |output|
           emit_tag(output, 'h2', element.label) unless element.options[:no_label]
           element.elements.each do |elem|
             if elem.identifiable?
-              elem.renderer.render(output, object_stack + elem, elem.options)
+              elem.renderer.render(output, object_stack + elem)
             else
-              elem.renderer.render(output, object_stack, elem.options)
+              elem.renderer.render(output, object_stack)
             end
           end
         end

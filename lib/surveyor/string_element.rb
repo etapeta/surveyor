@@ -1,9 +1,14 @@
 module Surveyor
   class StringElement < Element
     class HtmlRenderer < Surveyor::Element::HtmlRenderer
-      def render_widget(output, object, dom_namer, options)
-        # object is a string
-        emit_tag output, 'input', {:name => dom_namer.name, :id => dom_namer.id, :value => object}
+      def render_widget(output, object_stack)
+        # object_stack.object is a string
+        # element.options contains useful options
+        emit_tag output, 'input', {
+          :name => object_stack.dom_name,
+          :id => object_stack.dom_id,
+          :value => object_stack.object
+        }
       end
     end
 

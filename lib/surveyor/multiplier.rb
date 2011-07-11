@@ -3,7 +3,7 @@ module Surveyor
     class HtmlRenderer < Surveyor::Container::HtmlRenderer
       include ActionView::Helpers::JavaScriptHelper
 
-      def render(output, object_stack, options)
+      def render(output, object_stack)
         raise InvalidFieldMatchError, 'object must be an array' unless object_stack.object.is_a?(Array)
         # container div
         emit_tag(output, 'div',
@@ -15,7 +15,7 @@ module Surveyor
             emit_tag(output, 'div', :class => 'factor', :id => "#{object_stack.dom_id}_#{idx}") do |output|
               obj_stack = object_stack.mult(obj, idx)
               element.elements.each do |elem|
-                elem.renderer.render(output, obj_stack + elem, elem.options)
+                elem.renderer.render(output, obj_stack + elem)
               end
               emit_tag output, 'div', :class => 'mult_remover' do
                 output << link_to_function(Multiplier.action_labels[:remove], 'removeFactor(this)')
@@ -35,8 +35,7 @@ module Surveyor
         emit_tag output, 'div', :id => "templ_#{element.path_name.gsub('.','__')}" do
           tmp_surv = Survey.clone_for_factor(element)
           tmp_surv.renderer.render(output,
-            ObjectStack.new(tmp_surv, Hob.new(tmp_surv), nil, DomNamer.new(":prefix:", ":prefix:")),
-            tmp_surv.options)
+            ObjectStack.new(tmp_surv, Hob.new(tmp_surv), nil, DomNamer.new(":prefix:", ":prefix:")))
         end
         # continue searching other templates
         element.elements.each do |elem|

@@ -16,7 +16,7 @@ module Surveyor
       #       ...  # es: <input id="fieldid" name="fieldname"/>
       #     </div>
       #   </p>
-      def render(output, object_stack, options)
+      def render(output, object_stack)
         # create the frame and the label, and let every element
         # to render its own widget
         css = 'surv-block'
@@ -27,7 +27,7 @@ module Surveyor
             emit_tag(output, 'span', Element.required_label) if element.options[:required]
           end
           emit_tag(output, 'div', :class => element.type) do |output|
-            render_widget output, object_stack.object, object_stack.dom_namer, options
+            render_widget output, object_stack
           end
         end
       end
@@ -38,7 +38,7 @@ module Surveyor
 
       protected
 
-      def render_widget(output, object, dom_namer, options)
+      def render_widget(output, object_stack)
         raise ImplementedBySubclassError, "must be implemented by subclass [#{element.class.name}]"
       end
 
