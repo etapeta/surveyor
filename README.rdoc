@@ -210,41 +210,38 @@ Possible simple element types:
 ------
 
 == TO DO LIST
-- X use "render" name for rendering of html coder (or renderer)
-- X validation rules on element names (also :required and :regexp options)
-- O check effective use of options
-- O :size option for string element
-- O :show mode
-- O labels internationalization and :i18n (or :label) option handling (also error messages)
-- O :class option
-- O tip management and :tip option
-- O survey error messages and mistaken fields identification
-- O survey sheets
-- O calendar element
-- O text area element
-- O checkbox element
-- O rating element
-- O list-selector element (with :other option)
-- O radio-selector element (with :other option)
-- O file uploader element
-- O :renderer option
-- O rules for [:validation, :hiding, :editing]
-- O :reject_if option
-- O :hide_if option
-- O :readonly_if option
-- O survey nesting within an external form
-- O :limit option for multipliers
-- O :no_add option for multipliers
-- O :no_delete (or :no_resize) option for multipliers
-- O hob as activerecord (or anyway an ActiveRecord container for hobs)
-- O fill-in-the-blanks element
-- O survey collating on single objects rather than hobs
-- O :design mode for surveys
-- O quiz evaluation
-- O percent element
-- O slider element
-- O spinner element
-- O multiple surveys in the same page
+- check effective use of options in rendering
+- :size option for string element
+- :show mode
+- labels internationalization and :i18n (or :label) option handling (also error messages)
+- :class option
+- tip management and :tip option
+- survey sheets
+- calendar element
+- text area element
+- checkbox element
+- rating element
+- list-selector element (with :other option)
+- radio-selector element (with :other option)
+- file uploader element
+- :renderer option
+- rules for [:validation, :hiding, :editing]
+- :reject_if option
+- :hide_if option
+- :readonly_if option
+- survey nesting within an external form
+- :limit option for multipliers
+- :no_add option for multipliers
+- :no_delete (or :no_resize) option for multipliers
+- hob as activerecord (or anyway an ActiveRecord container for hobs)
+- fill-in-the-blanks element
+- survey collating on single objects rather than hobs
+- :design mode for surveys
+- quiz evaluation
+- percent element
+- slider element
+- spinner element
+- multiple surveys in the same page
 
 ====
 
