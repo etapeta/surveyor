@@ -27,3 +27,6 @@ label {
 .error label {
   color: red;
 }
+.hidden {
+  display:none;
+}

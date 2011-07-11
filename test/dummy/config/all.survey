@@ -21,6 +21,17 @@ survey 'nested' do
   end
 end
 
+survey 'super_nested' do
+  section 'outer' do
+    section 'middle' do
+      section 'inner' do
+        string 'master'
+        string 'detail'
+      end
+    end
+  end
+end
+
 survey 'empty' do
 end
 
