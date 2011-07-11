@@ -114,5 +114,10 @@ module Surveyor
       end
     end
 
+    def inspect
+      elems = elements.collect {|elem| "#{elem.name}:##{elem.type}"}
+      "#<#{self.class.name}:##{self.path_name} {elements:[#{elems.join(',')}]}>"
+    end
+
   end
 end

@@ -135,5 +135,9 @@ module Surveyor
       true
     end
 
+    def inspect
+      "#<#{self.class.name}:##{self.path_name}>"
+    end
+
   end
 end
