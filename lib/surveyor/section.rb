@@ -6,11 +6,11 @@
 module Surveyor
   class Section < Container
     class HtmlRenderer < Surveyor::Container::HtmlRenderer
-      def render(output, object, dom_namer, options)
+      def render(output, object_stack, options)
         emit_tag(output, 'div', :class => element.type) do |output|
           emit_tag(output, 'h2', element.label) unless element.options[:no_label]
           element.elements.each do |elem|
-            elem.renderer.render(output, object.send(elem.name), dom_namer + elem, elem.options)
+            elem.renderer.render(output, object_stack + elem, elem.options)
           end
         end
       end

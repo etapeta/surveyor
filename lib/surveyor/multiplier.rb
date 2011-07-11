@@ -3,23 +3,19 @@ module Surveyor
     class HtmlRenderer < Surveyor::Container::HtmlRenderer
       include ActionView::Helpers::JavaScriptHelper
 
-      def render(output, object, dom_namer, options)
-        raise InvalidFieldMatchError, 'object must be an array' unless object.is_a?(Array)
+      def render(output, object_stack, options)
+        raise InvalidFieldMatchError, 'object must be an array' unless object_stack.object.is_a?(Array)
         # container div
         emit_tag(output, 'div',
-          :id => dom_namer.id, :class => element.type, 'data-name' => dom_namer.name) do |output|
+          :id => object_stack.dom_id, :class => element.type, 'data-name' => object_stack.dom_name) do |output|
           # label for whole multiplier
           emit_tag output, 'h2', element.label unless element.options[:no_label]
           # existing elements
-          object.each_with_index do |obj, idx|
-            emit_tag(output, 'div', :class => 'factor', :id => "#{dom_namer.id}_#{idx}") do |output|
-              mult_namer = dom_namer * idx
+          object_stack.object.each_with_index do |obj, idx|
+            emit_tag(output, 'div', :class => 'factor', :id => "#{object_stack.dom_id}_#{idx}") do |output|
+              obj_stack = object_stack.mult(obj, idx)
               element.elements.each do |elem|
-                if elem.identifiable?
-                  elem.renderer.render(output, obj.send(elem.name), mult_namer + elem, elem.options)
-                else
-                  elem.renderer.render(output, obj, mult_namer, elem.options)
-                end
+                elem.renderer.render(output, obj_stack + elem, elem.options)
               end
               emit_tag output, 'div', :class => 'mult_remover' do
                 output << link_to_function(Multiplier.action_labels[:remove], 'removeFactor(this)')
@@ -39,8 +35,7 @@ module Surveyor
         emit_tag output, 'div', :id => "templ_#{element.path_name.gsub('.','__')}" do
           tmp_surv = Survey.clone_for_factor(element)
           tmp_surv.renderer.render(output,
-            Hob.new(tmp_surv),
-            DomNamer.new(":prefix:", ":prefix:"),
+            ObjectStack.new(tmp_surv, Hob.new(tmp_surv), nil, DomNamer.new(":prefix:", ":prefix:")),
             tmp_surv.options)
         end
         # continue searching other templates

@@ -16,13 +16,18 @@ module Surveyor
       #       ...  # es: <input id="fieldid" name="fieldname"/>
       #     </div>
       #   </p>
-      def render(output, object, dom_namer, options)
+      def render(output, object_stack, options)
         # create the frame and the label, and let every element
         # to render its own widget
-        emit_tag(output, 'div', :class => 'surv-block') do |output|
-          emit_tag(output, 'label', element.label, :for => dom_namer.id)
+        css = 'surv-block'
+        css += ' error' if object_stack.error?
+        emit_tag(output, 'div', :class => css) do |output|
+          emit_tag(output, 'label', :for => object_stack.dom_id) do |output|
+            output << element.label
+            emit_tag(output, 'span', Element.required_label) if element.options[:required]
+          end
           emit_tag(output, 'div', :class => element.type) do |output|
-            render_widget output, object, dom_namer, options
+            render_widget output, object_stack.object, object_stack.dom_namer, options
           end
         end
       end

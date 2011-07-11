@@ -14,10 +14,24 @@ module Surveyor
         html_options['method'] = options[:method].to_s if options[:method]
         html_options[:enctype] = "multipart/form-data" if options[:multipart]
         # html_options["data-remote"] = true if options["remote"]
+
+        # error messages explanation
         output.safe_concat(form_tag_html(html_options))
+        if object.errors.any?
+          emit_tag output, 'div', :class => 'error_explanation' do |output|
+            defmsg = pluralize(object.errors.count, "error") + ' prohibited this survey from being saved:'
+            emit_tag output, 'h2',
+              I18n.t('survey.error_explanation', :count => object.errors.count, :default => defmsg)
+            emit_tag output, 'ul' do |output|
+              object.errors.full_messages.each do |msg|
+                emit_tag output, 'li', msg
+              end
+            end
+          end
+        end
 
         # render survey elements
-        render(output, object, DomNamer.start(element), options)
+        render(output, ObjectStack.new(object.container, object), options)
 
         # render submit button
         action = 'Submit' # TODO: I18n
