@@ -60,6 +60,15 @@ module Surveyor
       current_value
     end
 
+    # validates current value on element's rules.
+    # Sets root_hob.errors on failed validations with dom_namer's id.
+    def validate_value(current_value, dom_namer, root_hob)
+      # reflects validations on elements
+      accepted_elements.each do |elem|
+        elem.validate_value current_value.send(elem.name), dom_namer + elem, root_hob
+      end
+    end
+
     # generates a simple representation of the element's value
     # i.e. hash, array or simple value
     def simple_out(b_value)

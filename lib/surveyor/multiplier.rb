@@ -125,6 +125,18 @@ module Surveyor
       current_value
     end
 
+    # validates current value on element's rules.
+    # Sets root_hob.errors on failed validations with dom_namer's id.
+    def validate_value(current_value, dom_namer, root_hob)
+      current_value.each_with_index do |obj, idx|
+        # reflects validations on elements
+        mult_namer = dom_namer * idx
+        accepted_elements.each do |elem|
+          elem.validate_value obj.send(elem.name), mult_namer + elem, root_hob
+        end
+      end
+    end
+
     # create a html expert that represents object as an element in HTML.
     def renderer
       HtmlRenderer.new(self)

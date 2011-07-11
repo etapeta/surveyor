@@ -26,5 +26,17 @@ module Surveyor
       new_partial_value
     end
 
+    # validates current value on element's rules.
+    # Sets root_hob.errors on failed validations with dom_namer's id.
+    def validate_value(current_value, dom_namer, root_hob)
+      if options[:required] && current_value.blank?
+        root_hob.mark_error(dom_namer, :not_present)
+      elsif options[:regexp]
+        unless current_value.blank? || Regexp.new(options[:regexp]).match(current_value)
+          root_hob.mark_error(dom_namer, :not_matching)
+        end
+      end
+    end
+
   end
 end

@@ -59,6 +59,10 @@ module Surveyor
 
     attr_reader :name, :parent, :options
 
+    def self.required_label
+      I18n.t(:"survey.required", :default => '*')
+    end
+
     def initialize(parent_element, name, options)
       @parent = parent_element
       @name = name
@@ -116,6 +120,12 @@ module Surveyor
     # Besides, the new value is always a simple value (string, hash, array)
     # while the old value could be a higher structure (depending on the element).
     def update_field(current_value, new_partial_value)
+      raise ImplementedBySubclassError, "must be implemented by subclass [#{element.class.name}]"
+    end
+
+    # validates current value on element's rules.
+    # Sets root_hob.errors on failed validations with dom_namer's id.
+    def validate_value(current_value, dom_namer, root_hob)
       raise ImplementedBySubclassError, "must be implemented by subclass [#{element.class.name}]"
     end
 

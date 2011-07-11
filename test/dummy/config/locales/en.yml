@@ -3,3 +3,11 @@
 
 en:
   hello: "Hello world"
+
+  survey:
+    errors:
+      not_present: "can't be blank"
+      not_matching: "is not valid"
+
+  ciao:
+    caro: "Ciao %{name}"

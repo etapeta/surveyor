@@ -26,6 +26,10 @@ module Surveyor
       raise NoBaseValueError, 'a Section has no value to update'
     end
 
+    def validate_value(current_value, dom_namer, root_hob)
+      raise NoBaseValueError, "a Section has no value to validate (#{dom_namer.id})"
+    end
+
     def renderer
       HtmlRenderer.new(self)
     end

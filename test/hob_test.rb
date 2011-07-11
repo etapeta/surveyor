@@ -350,4 +350,129 @@ class HobTest < ActiveSupport::TestCase
     assert_equal({ 'one' => '', 'two' => '' }, hob.to_h)
   end
 
+  test 'a hob with required values has errors on missing fields' do
+    survey = Surveyor::Parser.define do
+      survey 'simple' do
+        string 'one', :required => true
+        string 'two'
+      end
+    end
+    hob = Surveyor::Hob.new(survey)
+    # by default, errors are empty. They are set after calling :valid?
+    assert hob.errors.empty?
+
+    result = hob.valid?
+    assert_equal false, result
+    assert_equal 1, hob.errors.size
+    assert_equal ["survey.errors.not_present"], hob.errors['one']
+    assert_include "One can't be blank", hob.errors.full_messages
+  end
+
+  test 'a hob has its errors reset after update' do
+    survey = Surveyor::Parser.define do
+      survey 'simple' do
+        string 'one', :required => true
+        string 'two'
+      end
+    end
+    hob = Surveyor::Hob.new(survey, {})
+    assert_equal false, hob.valid?
+    assert_equal 1, hob.errors.size
+
+    hob.update({})
+    assert_equal 0, hob.errors.size
+  end
+
+  test 'a hob with regexp option accepts empty value unless :required' do
+    survey = Surveyor::Parser.define do
+      survey 'simple' do
+        string 'one', :required => true
+        string 'two', :regexp => '^a.+$'
+      end
+    end
+    hob = Surveyor::Hob.new(survey, {'one' => '1', 'two' => '2'})
+    assert_equal false, hob.valid?
+    assert_equal 1, hob.errors.size
+    assert_equal ['survey.errors.not_matching'], hob.errors['two']
+    assert_include 'Two is not valid', hob.errors.full_messages
+
+    hob.update({'one' => '1', 'two' => 'another'})
+    assert_equal true, hob.valid?
+    assert_equal 0, hob.errors.size
+  end
+
+  test 'a hob detects errors in inner structures' do
+    survey = Surveyor::Parser.define do
+      survey 'simple' do
+        sequence 'mixed' do
+          string 'one', :required => true
+          string 'two'
+        end
+      end
+    end
+    hob = Surveyor::Hob.new(survey, {'mixed' => {'one' => '1', 'two' => '2'} })
+    assert_equal true, hob.valid?
+
+    hob.update({'mixed' => {'one' => '', 'two' => '2'} })
+    assert_equal false, hob.valid?
+    assert_equal ["survey.errors.not_present"], hob.errors[:"mixed.one"]
+    assert_include "Mixed > One can't be blank", hob.errors.full_messages
+  end
+
+  test 'a hob detects error in inner sections' do
+    survey = Surveyor::Parser.define do
+      survey 'simple' do
+        sequence 'mixed' do
+          section 'main' do
+            string 'one', :required => true
+            string 'two'
+          end
+        end
+      end
+    end
+    hob = Surveyor::Hob.new(survey, {'mixed' => {'one' => '1', 'two' => '2'} })
+    assert_equal true, hob.valid?
+
+    hob.update({'mixed' => {'one' => '', 'two' => '2'} })
+    assert_equal false, hob.valid?
+    assert_equal ["survey.errors.not_present"], hob.errors[:"mixed.one"]
+  end
+
+  test 'a hob detects error in multiplier items' do
+    survey = Surveyor::Parser.define do
+      survey 'simple' do
+        multiplier 'mixed' do
+          string 'one', :required => true
+          string 'two'
+        end
+      end
+    end
+    hob = Surveyor::Hob.new(survey, {'mixed' => [{'one' => '1', 'two' => '2'}, {'one' => '', 'two' => '4'}] })
+    assert_equal false, hob.valid?
+
+    assert_equal ["survey.errors.not_present"], hob.errors[:"mixed.1.one"]
+    assert_equal ["Mixed #2 > One can't be blank"], hob.errors.full_messages
+  end
+
+  test 'hob errors can be customized' do
+    I18n.backend.store_translations :en, :survey => { 
+      :path_separator => ' | ',
+      :error_format => "« %{attribute} » : %{message}",
+      :attributes => {
+        :one => 'Primus'
+      }
+    }
+    survey = Surveyor::Parser.define do
+      survey 'simple' do
+        sequence 'mixed' do
+          string 'one', :required => true
+          string 'two'
+        end
+      end
+    end
+    hob = Surveyor::Hob.new(survey, {'mixed' => {'one' => '', 'two' => '2'} })
+    assert_equal false, hob.valid?
+    assert_include "« Mixed | Primus » : can't be blank", hob.errors.full_messages
+  end
+
 end
