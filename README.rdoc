@@ -4,8 +4,8 @@ Gem to manage surveys.
 
 A survey is essentially a form template.
 
-It is described through a DSL where every survey element is identified by a (hierarchical) 
-name. 
+It is described through a DSL where every survey element is identified by a (hierarchical)
+name.
 
 When associated to an object (which contains data), a survey can be rendered, and that
 (as current only option) generates a HTML form.
@@ -13,7 +13,7 @@ When associated to an object (which contains data), a survey can be rendered, an
 The result of the editing of a survey rendering is a hierarchical Hash.
 
 Three object types can be associated to a survey:
-- Surveyor::Hob: typical survey object, it is built on a survey and maps to 
+- Surveyor::Hob: typical survey object, it is built on a survey and maps to
   and from a hierarchical Hash;
 - ActiveRecord: as long as survey's elements are mapped on fields and relationships;
 - Document: from a document-based or key-value database, like CouchDb, MongoDb or Redis.
@@ -30,43 +30,46 @@ An element can override the default label calculation through the :label option.
 A survey element can have a tip, that is an help text that can be variously rendered
 associated to the field label.
 
-A survey element is generally rendered as a <div> element with opportune id and class, 
+A survey element is generally rendered as a <div> element with opportune id and class,
 depending on the element itself.
 
 Anyway, it can be given an additional CSS class through the :class option.
 
-In a <div> structure rendered from a survey element, fields have a unique id that depends 
-on the survey name, the location in the survey structure and the index (when in an array) 
+In a <div> structure rendered from a survey element, fields have a unique id that depends
+on the survey name, the location in the survey structure and the index (when in an array)
 of the rendered object. Input fields within the structure have also unique names, that
 reflects their position in the resulting survey hash.
 
 The simplest survey element is the string element, that allows for editing textual data
 on a single line. Its content can also be validated on a regular expression (:regexp option).
 
-Any element of a survey (as well as the survey itself) can be rendered as read-only. 
-This (as well as other rendering options, like obligatoriness and visibility) can 
+Any element of a survey (as well as the survey itself) can be rendered as read-only.
+This (as well as other rendering options, like obligatoriness and visibility) can
 be specified in the options of an element or in a survey sheet.
 
 A survey sheet is a set of options for survey's elements that can be merged with a survey
 on rendering.
-This is particularly useful when a survey is used in a workflow, as it often happens, 
+This is particularly useful when a survey is used in a workflow, as it often happens,
 since in any workflow node a different profile can access the survey, requiring custom
 visibility and editing possibilities.
 
 A survey or a survey sheet can be associated a set of rules for:
 - visibility: is an element currently visible?
 - readonlyness, or editability: can an element currently be edited?
-- validation: does an element contain valid data? 
-- existance: is an element part of this form? 
-All rules are evaluated server-side. 
+- validation: does an element contain valid data?
+- existance: is an element part of this form?
+All rules are evaluated server-side.
 
-All, except existance, can have a special implementation that allows 
+All rule kinds, except existance, can have a special implementation that allows
 these rules to be evaluated client-side (with limitations).
 
 Es: a choice element shows only a container among a set of containers depending
 on the chosen value.
 
 Some easy validation rules, like presence, could also be rendered in javascript
+
+The visibility rules, when actively implemented client-side, can be effectively
+used to build wizards.
 
 A survey can contain different types of containers:
 - a sequence contains a list of elements that are displayed sequentially.
@@ -153,11 +156,11 @@ Possible simple element types:
 
 [feature]
 
-  if a survey can be changed dynamically (see :design mode), it needs 
+  if a survey can be changed dynamically (see :design mode), it needs
   to be stored somewhere. Although it would be easier in a document-based or
   a key-value database, a classic choice is a relational database (ActiveRecord)
 
-[feature] 
+[feature]
 
   apply a survey on an object. Path changes depending on the object being
   an ActiveRecord or else.
@@ -168,7 +171,7 @@ Possible simple element types:
     <%= @survey.form_for(Blog.new) %>
   with access to blog.posts and blog.posts[].user
 
-[feature] 
+[feature]
 
   a survey can be nested within a form.
 
@@ -185,7 +188,7 @@ Possible simple element types:
 
   With this feature, error messages and error field localizations will be hard.
 
-[feature] 
+[feature]
   a survey can be applied a survey sheet.
 
   Since a complex form like a survey is often used in a workflow, where in
@@ -193,49 +196,55 @@ Possible simple element types:
   can externally hold some survey :hiding and :editing rules and apply
   them over the survey when requested.
 
-[feature] 
+[feature]
   a survey is often used as an exam or quiz, expecting some results.
 
-  Enhance the survey features to manage quizzes as well.
+  Furthermore, a survey can be used for an evaluation, where every answer
+  provides a rating, not a boolean (as a quiz does).
+
+  Enhance the survey features to manage quizzes and evaluations as well.
+
+[feature]
+  a survey element can optionally provide an external HTML renderer (option[:renderer])
 
 ------
 
 == TO DO LIST
-- use "render" name for rendering of html coder (or renderer)
-- validation rules on element names
-- :length option for string element
-- :show mode
-- labels internationalization and :i18n (or :label) option handling
-- :class option
-- tip management and :tip option
-- survey error messages and mistaken fields identification
-- :regexp option for string fields
-- survey sheets
-- calendar element
-- text area element
-- checkbox element
-- rating element
-- list-selector element (with :other option)
-- radio-selector element (with :other option)
-- file uploader element
-- :required option
-- rules for [:validation, :hiding, :editing]
-- :reject_if option
-- :hide_if option
-- :readonly_if option
-- survey nesting within an external form
-- :limit option for multipliers
-- :no_add option for multipliers
-- :no_delete (or :no_resize) option for multipliers
-- hob as activerecord (or anyway an ActiveRecord container for hobs)
-- fill-in-the-blanks element
-- survey collating on single objects rather than hobs
-- :design mode for surveys
-- quiz evaluation
-- percent element
-- slider element
-- spinner element
-- multiple surveys in the same page
+[X] use "render" name for rendering of html coder (or renderer)
+[X] validation rules on element names (also :required and :regexp options)
+[ ] check effective use of options
+[ ] :size option for string element
+[ ] :show mode
+[ ] labels internationalization and :i18n (or :label) option handling (also error messages)
+[ ] :class option
+[ ] tip management and :tip option
+[ ] survey error messages and mistaken fields identification
+[ ] survey sheets
+[ ] calendar element
+[ ] text area element
+[ ] checkbox element
+[ ] rating element
+[ ] list-selector element (with :other option)
+[ ] radio-selector element (with :other option)
+[ ] file uploader element
+[ ] :renderer option
+[ ] rules for [:validation, :hiding, :editing]
+[ ] :reject_if option
+[ ] :hide_if option
+[ ] :readonly_if option
+[ ] survey nesting within an external form
+[ ] :limit option for multipliers
+[ ] :no_add option for multipliers
+[ ] :no_delete (or :no_resize) option for multipliers
+[ ] hob as activerecord (or anyway an ActiveRecord container for hobs)
+[ ] fill-in-the-blanks element
+[ ] survey collating on single objects rather than hobs
+[ ] :design mode for surveys
+[ ] quiz evaluation
+[ ] percent element
+[ ] slider element
+[ ] spinner element
+[ ] multiple surveys in the same page
 
 ====
 
