@@ -210,41 +210,41 @@ Possible simple element types:
 ------
 
 == TO DO LIST
-[X] use "render" name for rendering of html coder (or renderer)
-[X] validation rules on element names (also :required and :regexp options)
-[ ] check effective use of options
-[ ] :size option for string element
-[ ] :show mode
-[ ] labels internationalization and :i18n (or :label) option handling (also error messages)
-[ ] :class option
-[ ] tip management and :tip option
-[ ] survey error messages and mistaken fields identification
-[ ] survey sheets
-[ ] calendar element
-[ ] text area element
-[ ] checkbox element
-[ ] rating element
-[ ] list-selector element (with :other option)
-[ ] radio-selector element (with :other option)
-[ ] file uploader element
-[ ] :renderer option
-[ ] rules for [:validation, :hiding, :editing]
-[ ] :reject_if option
-[ ] :hide_if option
-[ ] :readonly_if option
-[ ] survey nesting within an external form
-[ ] :limit option for multipliers
-[ ] :no_add option for multipliers
-[ ] :no_delete (or :no_resize) option for multipliers
-[ ] hob as activerecord (or anyway an ActiveRecord container for hobs)
-[ ] fill-in-the-blanks element
-[ ] survey collating on single objects rather than hobs
-[ ] :design mode for surveys
-[ ] quiz evaluation
-[ ] percent element
-[ ] slider element
-[ ] spinner element
-[ ] multiple surveys in the same page
+- [X] use "render" name for rendering of html coder (or renderer)
+- [X] validation rules on element names (also :required and :regexp options)
+- [ ] check effective use of options
+- [ ] :size option for string element
+- [ ] :show mode
+- [ ] labels internationalization and :i18n (or :label) option handling (also error messages)
+- [ ] :class option
+- [ ] tip management and :tip option
+- [ ] survey error messages and mistaken fields identification
+- [ ] survey sheets
+- [ ] calendar element
+- [ ] text area element
+- [ ] checkbox element
+- [ ] rating element
+- [ ] list-selector element (with :other option)
+- [ ] radio-selector element (with :other option)
+- [ ] file uploader element
+- [ ] :renderer option
+- [ ] rules for [:validation, :hiding, :editing]
+- [ ] :reject_if option
+- [ ] :hide_if option
+- [ ] :readonly_if option
+- [ ] survey nesting within an external form
+- [ ] :limit option for multipliers
+- [ ] :no_add option for multipliers
+- [ ] :no_delete (or :no_resize) option for multipliers
+- [ ] hob as activerecord (or anyway an ActiveRecord container for hobs)
+- [ ] fill-in-the-blanks element
+- [ ] survey collating on single objects rather than hobs
+- [ ] :design mode for surveys
+- [ ] quiz evaluation
+- [ ] percent element
+- [ ] slider element
+- [ ] spinner element
+- [ ] multiple surveys in the same page
 
 ====
 
