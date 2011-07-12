@@ -1,8 +1,21 @@
 module Surveyor
+  #
+  # A Multiplier is a Sequence which can be replicated
+  # multiple times.
+  #
   class Multiplier < Container
+    #
+    # Multiplier's rendered
+    #
     class HtmlRenderer < Surveyor::Container::HtmlRenderer
       include ActionView::Helpers::JavaScriptHelper
 
+      # Generate a HTML representation for the multiplier
+      #
+      # output       - output buffer
+      # object_stack - stack of the element instances being rendered
+      #
+      # Return nothing
       def render(output, object_stack)
         raise InvalidFieldMatchError, 'object must be an array' unless object_stack.object.is_a?(Array)
         # container div
@@ -30,6 +43,17 @@ module Surveyor
         end
       end
 
+      # Render a HTML template of the element, if necessary.
+      # A template is a HTML partial which can be used by
+      # an element instance to update itself based on certain
+      # element events.
+      # Currently, only multiplier need to render templates.
+      # All template are contained within a hidden div.
+      #
+      # output    - rendering buffer
+      # dom_namer - naming information for the template
+      #
+      # Return nothing.
       def render_templates(output, dom_namer)
         # render the template with special prefix
         emit_tag output, 'div', :id => "templ_#{element.path_name.gsub('.','__')}" do
@@ -49,6 +73,10 @@ module Surveyor
 
     end
 
+    # general labels corresponding to the actions (links in HTML)
+    # that a multiplier handles.
+    #
+    # Return a Hash[Symbol, String]
     def self.action_labels
       {   # TODO: from I18n
         :add => 'Add',
@@ -58,17 +86,25 @@ module Surveyor
 
     # The default value that this element has when the survey
     # is instanciated (empty).
+    # Inherited from Element.
     #
     # Since this element resembles an ordered list of hashes,
     # the base element is an empty list. At runtime, the list
     # will be filled with hobs (that will be initialized with
     # the elements of this container).
+    #
+    # Return a Object (an Array, precisely)
     def default_value
       []
     end
 
-    # generates a simple representation of the element's value
-    # i.e. hash, array or simple value
+    # Generate a simple representation of the element's value
+    # i.e. hash, array or simple value.
+    # For a general container, the result is a Hash.
+    #
+    # b_value - object to extract data from
+    #
+    # Return an Array (for a multiplier).
     def simple_out(b_value)
       # a multiplier generates an array of hashes from an array of hobs
       b_value.collect do |b_item|
@@ -81,11 +117,15 @@ module Surveyor
       end
     end
 
-    # updates current value with a new value, returning
+    # Update current value with a new value, returning
     # the current value updated.
+    # For a general container, current_value is a Hob and new_partial_value
+    # is a Hash.
     #
-    # NOTE: For a multiplier, old_value should be an array of hobs,
-    # while new_partial_value should be an array of hashes
+    # current_value     - current value for the element
+    # new_partial_value - partial value having new information for the current value
+    #
+    # Return the new current value updated
     def update_field(current_value, new_partial_value)
       unless new_partial_value.is_a?(Array)
         raise InvalidFieldMatchError, "#{path_name} must be an Array"
@@ -119,8 +159,15 @@ module Surveyor
       current_value
     end
 
-    # validates current value on element's rules.
+    # Validates current value on element's rules.
     # Sets root_hob.errors on failed validations with dom_namer's id.
+    #
+    # current_value - current value for the element
+    # dom_namer     - naming information for the element
+    # root_hob      - Hob that corresponds to the Survey, and holds all errors
+    #                 for the element tree
+    #
+    # Return nothing
     def validate_value(current_value, dom_namer, root_hob)
       current_value.each_with_index do |obj, idx|
         # reflects validations on elements
@@ -131,7 +178,9 @@ module Surveyor
       end
     end
 
-    # create a html expert that represents object as an element in HTML.
+    # A html expert that can render a HTML representation for the element.
+    #
+    # Return a Object that respond to :render(output, object_stack).
     def renderer
       HtmlRenderer.new(self)
     end

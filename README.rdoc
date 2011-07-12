@@ -213,6 +213,7 @@ Possible simple element types:
 ------
 
 == TO DO LIST
+- refactor element frame in a Element method
 - :size option for string element
 - :show mode
 - labels internationalization and :i18n (or :label) option handling (also error messages)
