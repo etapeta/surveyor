@@ -36,6 +36,15 @@ module Surveyor
       #
       # Return nothing.
       def render(output, object_stack)
+        emit_standard_frame(output, object_stack) do |output|
+          render_widget output, object_stack
+        end
+      end
+
+      # Generate a standard frame for an element.
+      # It can be customized, but probably that requires
+      # a revision of the javascript code.
+      def emit_standard_frame(output, object_stack, &blk)
         # create the frame and the label, and let every element
         # to render its own widget
         css = 'surv-block'
@@ -46,7 +55,7 @@ module Surveyor
             emit_tag(output, 'span', Element.required_label) if element.options[:required]
           end
           emit_tag(output, 'div', :class => element.type) do |output|
-            render_widget output, object_stack
+            blk.call(output)
           end
         end
       end
