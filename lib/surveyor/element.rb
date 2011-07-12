@@ -1,6 +1,8 @@
 module Surveyor
   #
   # Abstract component of a Survey.
+  # Options for all elements:
+  # :readonly - if true, the element, and possibly any inner element, cannot be changed.
   #
   class Element
     #
@@ -191,6 +193,15 @@ module Surveyor
     # Return a String
     def label
       name
+    end
+
+    # When instantiated, can this element be changed, or
+    # anyway input?
+    # Default value: false
+    #
+    # Return true if this element can be changed, false otherwise.
+    def readonly?
+      options[:readonly] ? options[:readonly] : parent ? parent.readonly? : false
     end
 
     # The default value that this element has when the survey
