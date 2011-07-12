@@ -1,5 +1,11 @@
 module Surveyor
+  #
+  # Abstract element that contains other elements.
+  #
   class Container < Element
+    #
+    # Generic renderer for a Container
+    #
     class HtmlRenderer < Surveyor::Element::HtmlRenderer
 
       # Render a HTML representation of a Container
@@ -140,7 +146,7 @@ module Surveyor
     # recursively replaced with their contained elements.
     #
     # recurse - flag that is true if this element is the
-    # first element involved in the recursive search.
+    #           first element involved in the recursive search.
     #
     # Return an Array
     def accepted_elements(recurse = false)

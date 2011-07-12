@@ -1,9 +1,23 @@
 module Surveyor
+  #
+  # Container that contains all survey elements.
+  #
   class Survey < Sequence
+    #
+    # Renderer for a Survey
+    #
     class HtmlRenderer < Surveyor::Container::HtmlRenderer
       include ActionView::Helpers::FormTagHelper
       include ActionView::Helpers::JavaScriptHelper
 
+      # Generate a HTML representation for the form tag that should
+      # input survey data.
+      #
+      # object - Hob to render in the form
+      # url - url to call on form submission
+      # options - options for form.
+      #
+      # Return a String containing the HTML representation.
       def render_form(object, url, options)
         output = ActiveSupport::SafeBuffer.new
 
@@ -43,6 +57,16 @@ module Surveyor
         output
       end
 
+      # Render the survey templates.
+      # A template is a HTML partial which can be used by
+      # an element instance to update itself based on certain
+      # element events.
+      # Currently, only multiplier need to render templates.
+      # All template are contained within a hidden div.
+      #
+      # options - options for the div containing the templates.
+      #
+      # Return a String containing the HTML representation for the templates div.
       def wrap_templates(options)
         output = ActiveSupport::SafeBuffer.new
         emit_tag(output, 'div', :id => "templates_#{options[:id] || element.name}", :class => 'hidden') do
@@ -57,10 +81,23 @@ module Surveyor
 
     end
 
+    # Initialize the survey.
+    #
+    # name - name of the survey.
+    # options - options for the survey element.
+    #
+    # Return nothing.
     def initialize(name, options)
       super(nil, name, options)
     end
 
+    # Clone the survey in a parallel survey.
+    # Inherited from Container.
+    #
+    # parent_element - container for the clone tree
+    #                  it must be nil in this case.
+    #
+    # Return the new survey.
     def clone(parent_element)
       raise WrongParentError, 'surveys can only be cloned as outer element' if parent_element
       result = self.class.new(name, options)
@@ -70,6 +107,12 @@ module Surveyor
       result
     end
 
+    # Create a fake survey that represents the multiplier
+    # elements.
+    #
+    # multiplier - multiplier to "clone"
+    #
+    # Return a new Survey.
     def self.clone_for_factor(multiplier)
       surv = self.new(multiplier.path_name.gsub('.','__'), multiplier.options.merge(:no_label => true))
       multiplier.elements.each do |elem|
@@ -78,11 +121,21 @@ module Surveyor
       surv
     end
 
-    # create a html expert that represents object as an element in HTML.
+    # A html expert that can render a HTML representation for the element.
+    #
+    # Return a Object that respond to :render(output, object_stack).
     def renderer
       @renderer ||= HtmlRenderer.new(self)
     end
 
+    # Create the whole HTML representation for the survey.
+    # It consists in the form tag and in a div tag that
+    # contains the templates necessary for the survey.
+    #
+    # object - hob that contains survey data (even partially)
+    # form_options - options for the tags
+    #
+    # Return a String containing the HTML code.
     def form_for(object, form_options = {})
       # TODO: form_options can contain elements which should be hidden or readonly
       opts = options.merge(form_options)

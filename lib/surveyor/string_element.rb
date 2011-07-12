@@ -1,6 +1,20 @@
 module Surveyor
+  #
+  # Element that allows the input of a generic string.
+  #
   class StringElement < Element
+    #
+    # Renderer for a string element
+    #
     class HtmlRenderer < Surveyor::Element::HtmlRenderer
+      # Render the HTML reresentation for inner part
+      # of the frame that characterizes the string element.
+      #
+      # output - buffer in which the representation is put
+      # object_stack - objectstack that represents the position
+      #                within the survey instance tree
+      #
+      # Return nothing.
       def render_widget(output, object_stack)
         # object_stack.object is a string
         # element.options contains useful options
@@ -12,18 +26,20 @@ module Surveyor
       end
     end
 
+    # A html expert that can render a HTML representation for the element.
+    #
+    # Return a Object that respond to :render(output, object_stack).
     def renderer
       HtmlRenderer.new(self)
     end
 
-    # updates current value with a new value, returning
+    # Update current value with a new value, returning
     # the current value updated.
     #
-    # NOTE: Consider that the new value can be a partial value,
-    # so it is not intended to replace the current value but only
-    # to update it.
-    # Besides, the new value is always a simple value (string, hash, array)
-    # while the old value could be a higher structure (depending on the element).
+    # current_value     - [String] current value for the element
+    # new_partial_value - [String] new value
+    #
+    # Return the new value
     def update_field(current_value, new_partial_value)
       unless new_partial_value.is_a?(String)
         raise InvalidFieldMatchError, "#{path_name} must be a String"
@@ -31,8 +47,15 @@ module Surveyor
       new_partial_value
     end
 
-    # validates current value on element's rules.
+    # Validates current value on element's rules.
     # Sets root_hob.errors on failed validations with dom_namer's id.
+    #
+    # current_value - current value for the element
+    # dom_namer     - naming information for the element
+    # root_hob      - Hob that corresponds to the Survey, and holds all errors
+    #                 for the element tree
+    #
+    # Return nothing
     def validate_value(current_value, dom_namer, root_hob)
       if options[:required] && current_value.blank?
         root_hob.mark_error(dom_namer, :not_present)

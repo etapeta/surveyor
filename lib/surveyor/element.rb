@@ -1,5 +1,11 @@
 module Surveyor
+  #
+  # Abstract component of a Survey.
+  #
   class Element
+    #
+    # Abstract renderer for an Element.
+    #
     class HtmlRenderer
       include ActionView::Helpers::FormTagHelper
       attr_reader :element
@@ -45,16 +51,49 @@ module Surveyor
         end
       end
 
+      # Render a HTML template of the element, if necessary.
+      # A template is a HTML partial which can be used by
+      # an element instance to update itself based on certain
+      # element events.
+      # Currently, only multiplier need to render templates.
+      # All template are contained within a hidden div.
+      #
+      # output    - rendering buffer
+      # dom_namer - naming information for the template
+      #
+      # Return nothing.
       def render_templates(output, dom_namer)
-        # only multipliers really render templates
+        # Does nothing. Only multipliers really render templates
       end
 
       protected
 
+      # Render the HTML reresentation for inner part
+      # of the frame that characterizes the string element.
+      #
+      # output - buffer in which the representation is put
+      # object_stack - objectstack that represents the position
+      #                within the survey instance tree
+      #
+      # Return nothing.
       def render_widget(output, object_stack)
         raise ImplementedBySubclassError, "must be implemented by subclass [#{element.class.name}]"
       end
 
+      # Utility method that outputs a HTML tag.
+      #
+      # output                - buffer to write the HTML code into
+      # tag_name              - name of the tag
+      # content_or_attributes - String or Hash. 
+      #                         If a block is given that defines the content, so
+      #                         this is a Hash containing the tag's attributes.
+      #                         Otherwise, it is a String representing the tag content.
+      # attributes            - nil if a block is given.
+      #                         Otherwise it is a Hash containing the tag's attributes.
+      # block                 - proc containing the definition of the tag content.
+      #                         The proc is passed the output buffer as argument.
+      #
+      # Return nothing.
       def emit_tag(output, tag_name, content_or_attributes = nil, attributes = nil, &block)
         if block
           raise TooMuchContentError, 'cannot have content and block' if attributes
@@ -70,6 +109,7 @@ module Surveyor
         end
       end
 
+      # Redefined.
       def protect_against_forgery?
         false
       end
@@ -77,6 +117,10 @@ module Surveyor
 
     attr_reader :name, :parent, :options
 
+    # Label that is attached to an element label tag
+    # to mark it as mandatory.
+    #
+    # Return a String.
     def self.required_label
       I18n.t(:"survey.required", :default => '*')
     end
