@@ -213,7 +213,6 @@ Possible simple element types:
 ------
 
 == TO DO LIST
-- labels internationalization and :i18n (or :label) option handling (also error messages)
 - :class option
 - tip management and :tip option
 - survey sheets

@@ -192,7 +192,14 @@ module Surveyor
     #
     # Return a String
     def label
-      name
+      if options[:label].nil?
+        default_label = I18n.translate(:"survey.attributes.#{name}", :default => name.humanize)
+        I18n.translate(:"survey.#{path_name}", :default => default_label)
+      elsif options[:label] =~ /^[a-z][a-z\d]*(\.[a-z][a-z\d]*)*$/
+        I18n.translate(options[:label].to_sym, :default => options[:label])
+      else
+        options[:label]
+      end
     end
 
     # When instantiated, can this element be changed, or

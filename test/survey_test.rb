@@ -61,4 +61,69 @@ class SurveyTest < ActiveSupport::TestCase
     assert_equal 'nested', surv_clone.path_name
   end
 
+  test 'element labels can be customized' do
+    I18n.backend.store_translations :en, {
+      :survey => {
+        :path_separator => ' | ',
+        :error_format => "« %{attribute} » : %{message}",
+        :attributes => {
+          :goalkeeper => 'Portiere',
+          :midfielder => 'NOT VALID'
+        },
+        :nested => {
+          :football_roles => {
+            # this label has priority vs :attributes:midfielder
+            :midfielder => 'Centrocampista'
+          }
+        }
+      },
+      :extra => {
+        :one => 'ONE'
+      }
+    }
+    survey = factory(:survey)
+
+    string_elem = survey.find('football_roles.goalkeeper')
+    assert_equal 'Portiere', string_elem.label
+
+    string_elem = survey.find('football_roles.midfielder')
+    assert_equal 'Centrocampista', string_elem.label
+
+    survey = Surveyor::Parser.define do
+      survey 'mult' do
+        multiplier 'many' do
+          string 'one', :label => 'extra.one'
+          string 'two'
+        end
+      end
+    end
+
+    string_elem = survey.find('many.one')
+    assert_equal 'ONE', string_elem.label
+  end
+
+  test 'multiplier can have action labels customized' do
+    I18n.backend.store_translations :en, {
+      :survey => {
+        :label_add => 'ADD'
+      },
+      :extra => {
+        :remove => 'REMOVE'
+      }
+    }
+
+    survey = Surveyor::Parser.define do
+      survey 'mult' do
+        multiplier 'many', :label_remove => 'extra.remove' do
+          string 'one'
+          string 'two'
+        end
+      end
+    end
+
+    multiplier = survey.find('many')
+    assert_equal 'ADD', multiplier.label_add
+    assert_equal 'REMOVE', multiplier.label_remove
+  end
+
 end

@@ -8,6 +8,7 @@ en:
     errors:
       not_present: "can't be blank"
       not_matching: "is not valid"
+    attributes:
 
   ciao:
     caro: "Ciao %{name}"
