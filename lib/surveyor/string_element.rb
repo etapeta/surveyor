@@ -1,11 +1,15 @@
 module Surveyor
   #
   # Element that allows the input of a generic string.
-  # Options characteristic of this element:
-  # :size - size (in characters) of the input tag
+  #
+  # Options for this element:
+  # :size         - size (in characters) of the input tag
   # :autocomplete - true if tag supports autocomplete
-  # :autofocus - true if input tag should have focus on page load
-  # :maxlength - maximum number of characters allowed
+  # :autofocus    - true if input tag should have focus on page load
+  # :maxlength    - maximum number of characters allowed
+  # :regexp       - input data must satisfy a regular expression
+  # :placeholder  - placeholder text
+  # :required     - input data cannot be left empty
   #
   class StringElement < Element
     #
