@@ -1,6 +1,11 @@
 module Surveyor
   #
   # Element that allows the input of a generic string.
+  # Options characteristic of this element:
+  # :size - size (in characters) of the input tag
+  # :autocomplete - true if tag supports autocomplete
+  # :autofocus - true if input tag should have focus on page load
+  # :maxlength - maximum number of characters allowed
   #
   class StringElement < Element
     #
@@ -18,11 +23,21 @@ module Surveyor
       def render_widget(output, object_stack)
         # object_stack.object is a string
         # element.options contains useful options
-        emit_tag output, 'input', {
+        tag_attributes = {
           :name => object_stack.dom_name,
           :id => object_stack.dom_id,
           :value => object_stack.object
         }
+        tag_attributes[:size] = element.options[:size] if element.options[:size]
+        tag_attributes[:autocomplete] = 'on' if element.options[:autocomplete]
+        tag_attributes[:autofocus] = 'autofocus' if element.options[:autofocus]
+        tag_attributes[:maxlength] = element.options[:maxlength] if element.options[:maxlength]
+        tag_attributes[:pattern] = element.options[:regexp] if element.options[:regexp]
+        tag_attributes[:placeholder] = element.options[:placeholder] if element.options[:placeholder]
+        tag_attributes[:required] = 'required' if element.options[:required]
+        # tag_attributes[:readonly] = element.options[:readonly] if element.options[:readonly]
+
+        emit_tag output, 'input', tag_attributes
       end
     end
 
