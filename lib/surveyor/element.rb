@@ -1,8 +1,17 @@
 module Surveyor
   #
   # Abstract component of a Survey.
+  #
+  # When rendered, it is composed of a frame, which contains the label,
+  # the tip and is generally common to all elements, and a widget,
+  # which contains the input element and possible interactivity mechanisms.
+  #
   # Options for all elements:
+  # :id       - id for the widget. It influences possible inner elements' ids.
+  # :class    - css class of the frame that contains the input widget
   # :readonly - if true, the element, and possibly any inner element, cannot be changed.
+  # :label    - label of the element
+  # :tip      - description of the element and possible help
   #
   class Element
     #
@@ -51,10 +60,15 @@ module Surveyor
         # to render its own widget
         css = 'surv-block'
         css += ' error' if object_stack.error?
+        css += " #{options[:class]}" if options[:class]
         emit_tag(output, 'div', :class => css) do |output|
           emit_tag(output, 'label', :for => object_stack.dom_id) do |output|
             output << element.label
             emit_tag(output, 'span', Element.required_label) if element.options[:required]
+          end
+          if options[:tip]
+            emit_tag(output, 'div', t(options[:tip], :default => options[:tip]),
+              :class => 'tip')
           end
           emit_tag(output, 'div', :class => element.type) do |output|
             blk.call(output)

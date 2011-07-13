@@ -2,6 +2,8 @@ module Surveyor
   #
   # Container that contains all survey elements.
   #
+  # Possible options (with those of Element):
+  #
   class Survey < Sequence
     #
     # Renderer for a Survey
