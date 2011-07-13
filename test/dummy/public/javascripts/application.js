@@ -32,8 +32,6 @@ function addFactor(templateid, elem) {
   blkElements.find('*[data-name^=":prefix:"]').each(function() {
     $(this).attr('data-name', $(this).attr('data-name').replace(/^:prefix:/, newname));
   });
-  // add the remove link
-  blkElements.append($('.mult_remover').first().clone());
   // place the cloned element before the multiplying link
   // alert(blkElements.html());
   blkElements.insertBefore(blk.children().last());

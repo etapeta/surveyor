@@ -25,6 +25,12 @@ module Surveyor
               elem.renderer.render(output, object_stack)
             end
           end
+          if element.options[:inner] && element.options[:inner][:label_remove]
+            # this is a multiplier template: render the remover link
+            emit_tag output, 'div', :class => 'mult_remover' do
+              output << link_to_function(element.options[:inner][:label_remove], 'removeFactor(this)')
+            end
+          end
         end
       end
 
@@ -40,6 +46,7 @@ module Surveyor
       #
       # Return nothing.
       def render_templates(output, dom_namer)
+        # do nothing, but continue searching other templates
         element.elements.each do |elem|
           if elem.identifiable?
             elem.renderer.render_templates output, dom_namer + elem

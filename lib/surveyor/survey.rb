@@ -72,10 +72,6 @@ module Surveyor
       def wrap_templates(options)
         output = ActiveSupport::SafeBuffer.new
         emit_tag(output, 'div', :id => "templates_#{options[:id] || element.name}", :class => 'hidden') do
-          # block for remove link
-          emit_tag output, 'div', :class => 'mult_remover' do
-            output << link_to_function(Multiplier.action_labels[:remove], 'removeFactor(this)')
-          end
           render_templates output, DomNamer.new(element.name, options[:id] || element.name)
         end
         output
@@ -116,7 +112,8 @@ module Surveyor
     #
     # Return a new Survey.
     def self.clone_for_factor(multiplier)
-      surv = self.new(multiplier.path_name.gsub('.','__'), multiplier.options.merge(:no_label => true))
+      surv = self.new(multiplier.path_name.gsub('.','__'),
+        multiplier.options.merge(:no_label => true, :inner => { :label_remove => multiplier.label_remove }))
       multiplier.elements.each do |elem|
         surv.elements << elem.clone(surv)
       end
