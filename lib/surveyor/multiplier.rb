@@ -35,13 +35,13 @@ module Surveyor
                 elem.renderer.render(output, obj_stack + elem)
               end
               emit_tag output, 'div', :class => 'mult_remover' do
-                output << link_to_function(Multiplier.action_labels[:remove], 'removeFactor(this)')
+                output << link_to_function(element.label_remove, 'removeFactor(this)')
               end
             end
           end
           # multiplier link
           emit_tag output, 'div', :class => 'actions' do
-            output << link_to_function(Multiplier.action_labels[:add],
+            output << link_to_function(element.label_add,
               "addFactor('templ_#{element.path_name.gsub('.','__')}', this)")
           end
         end

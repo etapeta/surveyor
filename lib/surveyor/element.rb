@@ -60,14 +60,14 @@ module Surveyor
         # to render its own widget
         css = 'surv-block'
         css += ' error' if object_stack.error?
-        css += " #{options[:class]}" if options[:class]
+        css += " #{element.options[:class]}" if element.options[:class]
         emit_tag(output, 'div', :class => css) do |output|
           emit_tag(output, 'label', :for => object_stack.dom_id) do |output|
             output << element.label
             emit_tag(output, 'span', Element.required_label) if element.options[:required]
           end
-          if options[:tip]
-            emit_tag(output, 'div', t(options[:tip], :default => options[:tip]),
+          if element.options[:tip]
+            emit_tag(output, 'div', I18n.t(element.options[:tip], :default => element.options[:tip].to_s),
               :class => 'tip')
           end
           emit_tag(output, 'div', :class => element.type) do |output|
