@@ -98,7 +98,7 @@ module Surveyor
       container.validate_value(self, DomNamer.start(container), self)
     end
 
-    # Errors object that holds all information 
+    # Errors object that holds all information
     # about attribute error messages.
     #
     # Return a HobErrors.
@@ -109,7 +109,12 @@ module Surveyor
     # Redefinition of ActiveModel's Errors
     class HobErrors < ::ActiveModel::Errors
 
-      # All the full error messages for the hob
+      # All the full error messages for the hob.
+      #
+      # NOTE: Since all error message lose their association with the
+      # survey that generated them, the attribute names cannot be
+      # made exactly equal, because we cannot access element's
+      # options[:label]
       #
       # Return an Array of String
       def full_messages
@@ -120,7 +125,7 @@ module Surveyor
           next if messages.empty?
 
           if attribute == :base
-            messages.each {|m| full_messages << translated_message(m) }
+            messages.each {|m| full_messages << Element.i18n(m, m) }
           else
             # attribute is in :id format \w+(\.(\w+|\d+))*
             # es:
@@ -130,17 +135,18 @@ module Surveyor
 
             separator = I18n.translate(:"survey.path_separator", :default => ' > ')
             # start changing indexes
-            attribute_path_name = attribute.to_s.split('.').collect {|n|
+            instance_path = attribute.to_s.split('.')
+            attribute_path_name = instance_path.collect {|n|
               if n =~ /^\d+$/
                 " ##{1 + n.to_i}"
               else
-                attr_name = I18n.translate(:"survey.attributes.#{n}", :default => n.humanize)
+                attr_name = Element.i18n(:"survey.attributes.#{n}", n.humanize)
                 "#{separator}#{attr_name}"
               end
             }.join('')[separator.size..-1]
             options = { :default => "%{attribute} %{message}", :attribute => attribute_path_name }
             messages.each do |m|
-              msg = I18n.t(m, :default => m)
+              msg = Element.i18n(m, m)
               full_messages << I18n.t(:"survey.error_format", options.merge(:message => msg))
             end
           end
@@ -150,15 +156,6 @@ module Surveyor
       end
 
       protected
-
-      # Translate a message
-      #
-      # msg - message to translate
-      #
-      # Return a String
-      def translated_message(msg)
-        (msg =~ /^[\w\.]+$/) ? I18n.t(msg) : msg
-      end
 
     end
 
@@ -205,7 +202,7 @@ module Surveyor
       end
     end
 
-    # Augments the hob interface by creating variables 
+    # Augments the hob interface by creating variables
     # and corresponding methods to access them
     # based on structure of the given element.
     #

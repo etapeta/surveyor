@@ -206,14 +206,7 @@ module Surveyor
     #
     # Return a String
     def label
-      if options[:label].nil?
-        default_label = I18n.translate(:"survey.attributes.#{name}", :default => name.humanize)
-        I18n.translate(:"survey.#{path_name}", :default => default_label)
-      elsif options[:label] =~ /^[a-z][a-z\d]*(\.[a-z][a-z\d]*)*$/
-        I18n.translate(options[:label].to_sym, :default => options[:label])
-      else
-        options[:label]
-      end
+      Element.i18n(options[:label], :"survey.#{path_name}", :"survey.attributes.#{name}", name.humanize)
     end
 
     # When instantiated, can this element be changed, or
@@ -287,6 +280,35 @@ module Surveyor
     # Return a String
     def inspect
       "#<#{self.class.name}:##{self.path_name}>"
+    end
+
+    # Search in I18n store a label from a set of keys.
+    #
+    # NOTE: This implementation does not allow specifying an explicit lowercase text
+    # (unless it is the last key), because it is considered a I81n key and therefore
+    # searched for in the I18n store. Since the search will fail, the previous value
+    # is assumed.
+    #
+    # keys          - Array of String or Symbols.
+    #                 items can be textual strings or I18n keys to search for, in priority order.
+    #                 if a key is not in I18n format (all lowercase with no spaces),
+    #                 that key is considered a true label and has priority over
+    #                 next keys.
+    #                 if a key is null, it is not considered in label search.
+    #                 The last key should be a valid textual string.
+    #
+    # Return a String.
+    def self.i18n(*keys)
+      default_value = keys.pop.to_s
+      keys.reverse.inject(default_value) {|text,key|
+        if key.nil?
+          text
+        elsif key.to_s =~ /^[a-z][a-z_\d]*(\.[a-z][a-z_\d]*)*$/ # i18n key
+          I18n.t(key, :default => text)
+        else
+          key.to_s
+        end
+      }
     end
 
   end

@@ -213,8 +213,6 @@ Possible simple element types:
 ------
 
 == TO DO LIST
-- :class option
-- tip management and :tip option
 - survey sheets
 - calendar element
 - text area element

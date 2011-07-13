@@ -79,26 +79,12 @@ module Surveyor
 
     # Label for action to add new multiplier items
     def label_add
-      default_label = I18n.t("survey.label_add", :default => 'Add')
-      if options[:label_add].nil?
-        default_label
-      elsif options[:label_add] =~ /^[a-z][a-z\d]*(\.[a-z][a-z\d]*)*$/
-        I18n.t(options[:label_add], :default => default_label)
-      else
-        options[:label_add]
-      end
+      Element.i18n(options[:label_add], :"survey.label_add", 'Add')
     end
 
     # Label for action to remove existing multiplier items
     def label_remove
-      default_label = I18n.t("survey.label_remove", :default => 'Remove')
-      if options[:label_remove].nil?
-        default_label
-      elsif options[:label_remove] =~ /^[a-z][a-z\d]*(\.[a-z][a-z\d]*)*$/
-        I18n.t(options[:label_remove], :default => default_label)
-      else
-        options[:label_remove]
-      end
+      Element.i18n(options[:label_remove], :"survey.label_remove", 'Remove')
     end
 
     # The default value that this element has when the survey
