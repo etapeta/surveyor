@@ -54,7 +54,7 @@ This is particularly useful when a survey is used in a workflow, as it often hap
 since in any workflow node a different profile can access the survey, requiring custom
 visibility and editing possibilities.
 
-A survey or a survey sheet can be associated a set of rules for:
+A survey (or a survey sheet) can be associated a set of rules for:
 - visibility: is an element currently visible?
 - readonlyness, or editability: can an element currently be edited?
 - validation: does an element contain valid data?
@@ -214,6 +214,8 @@ Possible simple element types:
 
 == TO DO LIST
 - survey sheets
+- option :rejected as boolean or rule (server side only)
+- check element names validity (syntax, duplication, ...)
 - calendar element
 - text area element
 - checkbox element
@@ -223,9 +225,8 @@ Possible simple element types:
 - file uploader element
 - :renderer option
 - rules for [:validation, :hiding, :editing]
-- :reject_if option
-- :hide_if option
-- :readonly_if option
+- :hide option, rule with client side implementation
+- :readonly option, rule with client side implementation
 - survey nesting within an external form
 - :limit option for multipliers
 - :no_add option for multipliers

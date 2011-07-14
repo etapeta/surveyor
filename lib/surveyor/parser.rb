@@ -134,6 +134,17 @@ module Surveyor
       @container.elements << StringElement.new(@container, name, options)
     end
 
+    # Declare a survey sheet.
+    #
+    # name - name of the sheet
+    # sheet - hash containing element path names indicizing set of options
+    #
+    # Return nothing
+    def sheet(name, sheet)
+      raise "Only surveys can have sheets" unless @container.is_a?(Survey)
+      @container.sheets[name] = sheet
+    end
+
   end
 
 end

@@ -81,7 +81,7 @@ module Surveyor
     #
     # Return the new element for the clone tree.
     def clone(parent_element)
-      result = self.class.new(parent_element, name, options)
+      result = self.class.new(parent_element, name, options.clone)
       elements.each do |elem|
         result.elements << elem.clone(result)
       end

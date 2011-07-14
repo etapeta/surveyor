@@ -126,4 +126,47 @@ class SurveyTest < ActiveSupport::TestCase
     assert_equal 'REMOVE', multiplier.label_remove
   end
 
+  test 'a survey can be merged options from a sheet' do
+    base_survey = Surveyor::Parser.define do
+      survey 'mult' do
+        multiplier 'many', :label_remove => 'extra.remove' do
+          string 'one'
+          string 'two', :required => true
+        end
+      end
+    end
+
+    sheet = {
+      'many.one' => { :required => true },
+      'many.two' => { :required => false }
+    }
+
+    survey = base_survey.clone(nil).apply_sheet(sheet)
+    one = survey.find('many.one')
+    assert_kind_of Surveyor::StringElement, one
+    assert_equal true, one.options[:required]
+    assert_equal false, survey.find('many.two').options[:required]
+  end
+
+  test 'a survey can have sheets declared within' do
+    survey = Surveyor::Parser.define do
+      survey 'mult' do
+        multiplier 'many', :label_remove => 'extra.remove' do
+          string 'one'
+          string 'two', :required => true
+        end
+
+        sheet 'master', {
+          'many.one' => { :required => true },
+          'many.two' => { :required => false }
+        }
+      end
+    end
+
+    assert_kind_of Hash, survey.sheets['master']
+    sheeted_survey = survey.apply_sheet(survey.sheets['master'])
+    assert_equal true, sheeted_survey.find('many.one').options[:required]
+    assert_nil survey.find('many.one').options[:required]
+  end
+
 end

@@ -172,7 +172,7 @@ module Surveyor
     #
     # Return the new element for the clone tree.
     def clone(parent_element)
-      self.class.new(parent_element, name, options)
+      self.class.new(parent_element, name, options.clone)
     end
 
     # Type of element.

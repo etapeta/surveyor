@@ -79,6 +79,11 @@ module Surveyor
 
     end
 
+    # Sheets for the survey.
+    #
+    # Return a Hash[String,Hash[Symbol,Object]].
+    attr_reader :sheets
+
     # Initialize the survey.
     #
     # name - name of the survey.
@@ -87,10 +92,12 @@ module Surveyor
     # Return nothing.
     def initialize(name, options)
       super(nil, name, options)
+      @sheets = {}
     end
 
     # Clone the survey in a parallel survey.
     # Inherited from Container.
+    # NOTE: A cloned survey has no sheets.
     #
     # parent_element - container for the clone tree
     #                  it must be nil in this case.
@@ -98,7 +105,7 @@ module Surveyor
     # Return the new survey.
     def clone(parent_element)
       raise WrongParentError, 'surveys can only be cloned as outer element' if parent_element
-      result = self.class.new(name, options)
+      result = self.class.new(name, options.clone)
       elements.each do |elem|
         result.elements << elem.clone(result)
       end
@@ -120,6 +127,20 @@ module Surveyor
       surv
     end
 
+    # Merge survey elements' options with options specified in sheet.
+    #
+    # sheet - hash[string,hash] that contains element's options indicized
+    #         by element's path name.
+    #
+    # Return a new survey with options merged.
+    def apply_sheet(sheet)
+      surv = clone(nil)
+      sheet.each do |path,opts|
+        surv.find(path).options.merge!(opts)
+      end
+      surv
+    end
+
     # A html expert that can render a HTML representation for the element.
     #
     # Return a Object that respond to :render(output, object_stack).
@@ -131,14 +152,20 @@ module Surveyor
     # It consists in the form tag and in a div tag that
     # contains the templates necessary for the survey.
     #
-    # object - hob that contains survey data (even partially)
+    # object       - hob that contains survey data (even subset, or superset)
+    # sheet        - survey sheet name to apply, or nil if none
     # form_options - options for the tags
     #
     # Return a String containing the HTML code.
-    def form_for(object, form_options = {})
+    def form_for(object, sheet = nil, form_options = {})
+      survey = if sheet && sheets[sheet]
+        apply_sheet(sheets[sheet])
+      else
+        self
+      end
       # TODO: form_options can contain elements which should be hidden or readonly
-      opts = options.merge(form_options)
-      renderer.render_form(object, form_options[:url], opts) + renderer.wrap_templates(opts)
+      opts = survey.options.merge(form_options)
+      survey.renderer.render_form(object, form_options[:url], opts) + survey.renderer.wrap_templates(opts)
     end
 
   end
