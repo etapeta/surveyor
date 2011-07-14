@@ -11,6 +11,7 @@ module Surveyor
     #
     class HtmlRenderer < Surveyor::Container::HtmlRenderer
       def render(output, object_stack)
+        return if element.options[:killed]
         emit_tag(output, 'div', :class => element.type) do |output|
           emit_tag(output, 'h2', element.label) unless element.options[:no_label]
           element.elements.each do |elem|

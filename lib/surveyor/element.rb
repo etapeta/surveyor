@@ -12,6 +12,7 @@ module Surveyor
   # :readonly - if true, the element, and possibly any inner element, cannot be changed.
   # :label    - label of the element
   # :tip      - description of the element and possible help
+  # :killed   - true if element does not have to be rendered
   #
   class Element
     #
@@ -47,6 +48,7 @@ module Surveyor
       #
       # Return nothing.
       def render(output, object_stack)
+        return if element.options[:killed]
         emit_standard_frame(output, object_stack) do |output|
           render_widget output, object_stack
         end
