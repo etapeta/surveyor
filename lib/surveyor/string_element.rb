@@ -36,10 +36,11 @@ module Surveyor
         tag_attributes[:autocomplete] = 'on' if element.options[:autocomplete]
         tag_attributes[:autofocus] = 'autofocus' if element.options[:autofocus]
         tag_attributes[:maxlength] = element.options[:maxlength] if element.options[:maxlength]
-        tag_attributes[:pattern] = element.options[:regexp] if element.options[:regexp]
         tag_attributes[:placeholder] = element.options[:placeholder] if element.options[:placeholder]
-        tag_attributes[:required] = 'required' if element.options[:required]
         tag_attributes[:readonly] = 'readonly' if element.readonly?
+        # tag_attributes[:required] = 'required' if element.options[:required]
+        # tag_attributes[:pattern] = element.options[:regexp] if element.options[:regexp]
+        # TODO: add a global option to manage these client-side options.
 
         emit_tag output, 'input', tag_attributes
       end

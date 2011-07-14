@@ -2,7 +2,7 @@
 
 Gem to manage surveys.
 
-A survey is essentially a form template.
+A survey is essentially a meta-form, or a form template.
 
 It is described through a DSL where every survey element is identified by a (hierarchical)
 name.
@@ -213,8 +213,7 @@ Possible simple element types:
 ------
 
 == TO DO LIST
-- survey sheets
-- option :rejected as boolean or rule (server side only)
+- option :killed as boolean or rule (server side only)
 - check element names validity (syntax, duplication, ...)
 - calendar element
 - text area element
@@ -223,6 +222,7 @@ Possible simple element types:
 - list-selector element (with :other option)
 - radio-selector element (with :other option)
 - file uploader element
+- string element: global option to manage :required and :regexp options on the client side.
 - :renderer option
 - rules for [:validation, :hiding, :editing]
 - :hide option, rule with client side implementation
