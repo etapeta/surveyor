@@ -30,6 +30,10 @@ survey 'super_nested' do
       end
     end
   end
+
+  sheet 'master locked', {
+    'outer.middle.inner.master' => {:readonly => true}
+  }
 end
 
 survey 'empty' do
@@ -40,6 +44,12 @@ survey 'simple' do
   string 'sanda'
   string 'laura'
   string 'cristian'
+  string 'comment', :size => 80
+
+  sheet 'claudio starts with a', {
+    'claudio' => { :regexp => 'a.*' },
+    'cristian' => { :required => true }
+  }
 end
 
 survey 'sectioned' do
@@ -56,6 +66,10 @@ survey 'sectioned' do
     string 'chair'
     string 'table'
   end
+
+  sheet 'no football', {
+    'sports.football' => { :killed => true }
+  }
 end
 
 survey 'sequenced' do
@@ -82,10 +96,14 @@ survey 'multiplied' do
   multiplier 'champions' do
     string 'jordan', :required => true
     multiplier 'miami' do
-      string 'james'
+      string 'james', :placeholder => 'Simply the best'
       string 'wade'
       string 'bosh'
     end
     string 'briant'
   end
+
+  sheet 'boo miami', {
+    'champions.miami' => { :killed => true }
+  }
 end

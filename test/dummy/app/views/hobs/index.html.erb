@@ -6,7 +6,10 @@
     <% unless nests.empty? %>
       <ul>
         <% nests.each do |nest| %>
-          <li><%= link_to nest.id, edit_hob_path(nest, :survey => surv.name) %></li>
+          <li><%= link_to "#{surv.name} ##{nest.id}", edit_hob_path(nest, :survey => surv.name) %></li>
+          <% surv.sheets.keys.each do |sheet_name| %>
+            <li><%= link_to "#{surv.name} ##{nest.id} [#{sheet_name}]", edit_hob_path(nest, :survey => surv.name, :sheet => sheet_name) %></li>
+          <% end %>
         <% end %>
       </ul>
     <% end %>
