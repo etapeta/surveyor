@@ -12,7 +12,7 @@ class SurveyTest < ActiveSupport::TestCase
     assert_equal 'nested.tennis.tournaments.grand_slam.wimbledon', wimbledon.path_name
   end
 
-  test 'any element can climb to its survey' do
+  test 'an element can climb to its survey' do
     wimbledon = @survey.elements[1].elements[0].elements[1].elements[2]
     assert_same @survey, wimbledon.survey
   end
@@ -24,6 +24,12 @@ class SurveyTest < ActiveSupport::TestCase
     assert_same @survey.elements[1].elements[0], tournaments
     w = tournaments.find('grand_slam.wimbledon')
     assert_same w, wimbledon
+  end
+
+  test 'a container finds itself when searched by an empty string' do
+    assert_equal @survey, @survey.find('')
+    tournaments = @survey.find('tennis.tournaments')
+    assert_equal tournaments, tournaments.find('')
   end
 
   test 'a survey can contain a multiplier' do

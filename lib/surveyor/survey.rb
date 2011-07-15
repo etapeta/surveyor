@@ -129,14 +129,17 @@ module Surveyor
 
     # Merge survey elements' options with options specified in sheet.
     #
-    # sheet - hash[string,hash] that contains element's options indicized
-    #         by element's path name.
+    # sheet - name of the sheet, if the sheet has been declared in the survey.
+    #         but it can be a Hash, representing the whole sheet.
     #
     # Return a new survey with options merged.
     def apply_sheet(sheet)
+      sheet = sheets[sheet] if sheet.is_a?(String)
       surv = clone(nil)
       sheet.each do |path,opts|
-        surv.find(path).options.merge!(opts)
+        element = surv.find(path)
+        raise ElementNotFound, "'#{path}' not found" unless element
+        element.options.merge!(opts)
       end
       surv
     end
@@ -159,7 +162,7 @@ module Surveyor
     # Return a String containing the HTML code.
     def form_for(object, sheet = nil, form_options = {})
       survey = if sheet && sheets[sheet]
-        apply_sheet(sheets[sheet])
+        apply_sheet(sheet)
       else
         self
       end

@@ -140,11 +140,69 @@ module Surveyor
     # sheet - hash containing element path names indicizing set of options
     #
     # Return nothing
-    def sheet(name, sheet)
-      raise "Only surveys can have sheets" unless @container.is_a?(Survey)
-      @container.sheets[name] = sheet
+    def sheet(name, sheet = nil, &blk)
+      raise ParsingError, "Only surveys can have sheets" unless @container.is_a?(Survey)
+      if blk
+        if sheet
+          raise ParsingError, "Only one sheet can be declared in a sheet directive"
+        end
+        # parse immediately, but elements must have been declared before
+        sheet_parser = SheetParser.new(@container)
+        sheet_parser.instance_eval(&blk)
+        @container.sheets[name] = sheet_parser.sheet
+      else
+        raise ParsingError, "In a sheet directive, sheet must be passed as a Hash" unless sheet.is_a?(Hash)
+        @container.sheets[name] = sheet
+      end
     end
 
+  end
+
+  # Object which parses sheet declaration
+  class SheetParser
+    attr_reader :element, :sheet, :parent
+
+    def initialize(element, parent = nil)
+      @element = element
+      @parent = parent
+      @sheet = {}
+    end
+
+    def root
+      parent ? parent.root : self
+    end
+
+    def method_missing(m, *args, &block)
+      if args.size == 1
+        # option: generate the path
+        raise ParsingError, "options can be assigned single values only" unless args.size == 1
+        register_options(Hash[m.to_s.chomp('=').to_sym => args[0]])
+        nil
+      else
+        # element name: recurse
+        raise ParsingError, "elements cannot be assigned values" unless args.empty?
+        elem = @element.find(m.to_s)
+        raise ParsingError, "unknown element: #{m}" unless elem
+        sp = SheetParser.new(elem, self)
+        if block
+          sp.instance_eval(&block)
+          nil
+        else
+          sp
+        end
+      end
+    end
+
+    protected
+
+    def register_options(options, elem_path = [])
+      if parent
+        parent.register_options(options, [element.name] + elem_path)
+      else
+        path_name = elem_path.join('.')
+        sheet[path_name] = (sheet[path_name] || {}).merge(options)
+      end
+    end
   end
 
 end

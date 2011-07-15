@@ -193,6 +193,8 @@ module Surveyor
     def find(path)
       if path.is_a?(String)
         find path.split('.')
+      elsif path.empty?
+        return self
       else
         elem = elements.detect {|elem| elem.name == path[0]}
         elem.nil? ? nil : path.size == 1 ? elem : elem.find(path[1..-1])

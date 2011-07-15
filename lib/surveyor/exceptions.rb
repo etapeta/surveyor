@@ -8,4 +8,6 @@ module Surveyor
   class TooMuchContentError < ::StandardError; end
   class WrongParentError < ::StandardError; end
   class CannotMultiplyError < ::StandardError; end
+  class ElementNotFound < ::StandardError; end
+  class ParsingError < ::StandardError; end
 end

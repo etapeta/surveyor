@@ -7,6 +7,37 @@ A survey is essentially a meta-form, or a form template.
 It is described through a DSL where every survey element is identified by a (hierarchical)
 name.
 
+An example of a survey definition:
+
+  survey 'hotel' do
+    section 'header' do
+      string 'owner', :readonly => true
+      calendar 'opened_on'
+    end
+    multiplier 'rooms' do
+      string 'number', :regexp => '[a-z]\d+', :required => true
+      list_selector 'floor', :values => (1..4).to_a
+      radio_selector 'beds', :values => (1..4).to_a
+    end
+    multiplier 'clients' do
+      string 'name'
+      sequence 'address' do
+        string 'street'
+        list_selector 'city', :values => :cities, :hide => rule('clients.address.street') != ''
+        list_selector 'country', :values => lambda { Country.all }
+      end
+    end
+
+    sheet 'setup' do
+      header.owner.readonly false
+      clients.hidden true
+    end
+    sheet 'registration' do
+      header.hidden true
+      rooms.readonly true
+    end
+  end
+
 When associated to an object (which contains data), a survey can be rendered, and that
 (as current only option) generates a HTML form.
 
@@ -198,6 +229,34 @@ Possible simple element types:
   any node a different profile can access the same form, a survey profile
   can externally hold some survey :hiding and :editing rules and apply
   them over the survey when requested.
+
+  I would like the survey sheet declared within a survey like:
+    survey 'exam' do
+      ...
+
+      sheet 'examinee' do
+        members.rating.hidden true
+        rooms.location do
+          required true
+          size 60
+          hidden rule(assignee == 'Mark')
+        end
+      end
+    end
+
+  Alternative syntax:
+    sheet 'examinee' do
+      members.rating.hidden = true
+      rooms.location do
+        required = true
+        size = 60
+        hidden = rule(assignee == 'Mark')
+      end
+    end
+  This alternative syntax could be more readable, but there is a problem:
+  in parsing blocks, statements like
+    required = true
+  are interpreted as variable assignment.
 
 [feature]
   a survey is often used as an exam or quiz, expecting some results.
