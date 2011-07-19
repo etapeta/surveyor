@@ -15,7 +15,7 @@ module Surveyor
       #
       # Return nothing
       def render(output, object_stack)
-        return if element.options[:killed]
+        return if element.options[:killed] || element.elements.empty?
         html_attrs = element.identifiable? ? { :id => object_stack.dom_id } :
           element.options[:id] ? { :id => element.options[:id] } : {}
         emit_tag(output, 'div', html_attrs.merge({:class => "surv-container #{element.type}"})) do |output|

@@ -21,7 +21,7 @@ module Surveyor
       #
       # Return nothing
       def render(output, object_stack)
-        return if element.options[:killed]
+        return if element.options[:killed] || element.elements.empty?
         raise InvalidFieldMatchError, 'object must be an array' unless object_stack.object.is_a?(Array)
         # container div
         emit_tag(output, 'div',
