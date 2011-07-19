@@ -72,7 +72,7 @@ module Surveyor
             emit_tag(output, 'div', I18n.t(element.options[:tip], :default => element.options[:tip].to_s),
               :class => 'tip')
           end
-          emit_tag(output, 'div', :class => element.type) do |output|
+          emit_tag(output, 'div', :class => "widget #{element.type}") do |output|
             blk.call(output)
           end
         end
