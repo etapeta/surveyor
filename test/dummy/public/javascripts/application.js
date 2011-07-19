@@ -46,3 +46,16 @@ function removeFactor(elem) {
   // insert in the factor a text field ':prefix:[deleted]'
   $(elem).closest('.factor').append('<input name="' + name + '"/>');
 }
+
+
+// javascript widgets initialization
+$(function() {
+  // other options with radios
+  $(".radio input[type=radio]").change(function() {
+    if ($(this).hasClass('other_trigger')) {
+      $(this).parent().find('.other').show();
+    } else {
+      $(this).parent().find('.other').hide();
+    }
+  });
+});

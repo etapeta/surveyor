@@ -10,6 +10,7 @@ module Surveyor
   require 'surveyor/multiplier'
   require 'surveyor/sequence'
   require 'surveyor/string_element'
+  require 'surveyor/radio_element'
   require 'surveyor/survey'
   require 'surveyor/hob'
   # require 'surveyor/'
