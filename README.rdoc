@@ -38,6 +38,42 @@ An example of a survey definition:
     end
   end
 
+This survey can be managed in controller as:
+
+  def edit
+    # get the hob from database (if hob is a ActiveRecord)
+    @hob = Hob.find(...)
+
+
+    # get the survey
+    @survey = ...
+    # gather survey information in hash (for example, from a document-oriented database)
+    hash = ...
+    # if necessary, use a sheet
+    @sheet = @survey.sheets['my sheet']
+    # create the hob to be edited
+    @hob = Surveyor::Hob.new(@survey, hash)
+  end
+
+  def update
+    # get back the hob
+    @hob = Surveyor::Hob.new(@survey, @nest.document)
+    @hob.update(params[@survey.name])
+    if @hob.valid?
+      @hob.save!  # or what else to store data
+      redirect_to hobs_path
+    else
+      # correct the mistakes
+      render :action => :edit
+    end
+  end
+
+And in the edit view:
+
+  <h1>Editing hob</h1>
+  <%= @survey.form_for(@hob, @sheet, :url => hob_path(@hob)) %>
+  <%= link_to 'Back', hobs_path %>
+
 When associated to an object (which contains data), a survey can be rendered, and that
 (as current only option) generates a HTML form.
 
