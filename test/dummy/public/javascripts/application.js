@@ -51,8 +51,16 @@ function removeFactor(elem) {
 // javascript widgets initialization
 $(function() {
   // other options with radios
-  $(".radio input[type=radio]").change(function() {
+  $(".selector input[type=radio]").change(function() {
     if ($(this).hasClass('other_trigger')) {
+      $(this).parent().find('.other').show();
+    } else {
+      $(this).parent().find('.other').hide();
+    }
+  });
+  $(".selector select").change(function() {
+    //alert($(this).find('option:selected').html());
+    if ($(this).find('option:selected').hasClass('other_trigger')) {
       $(this).parent().find('.other').show();
     } else {
       $(this).parent().find('.other').hide();

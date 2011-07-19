@@ -11,6 +11,7 @@ module Surveyor
   #                 A label is evaluated as I18n if lowercase with dots and without spaces.
   # :other        - if true, last value is considered a "Other" alternative: when selected
   #                 it shows a string field (with no label)
+  # :display_as   - :radio | :list (default)
   # :required     - input data cannot be left empty.
   #
   class SelectorElement < Element
@@ -34,21 +35,37 @@ module Surveyor
           element.options[:values]
         # TODO: manage readonly? flag
         values = values.collect {|v| [v, v] } if values.first.is_a?(String)
+        values.unshift(['','']) unless element.options[:required]
 
         emit_tag output, 'div', :id => object_stack.dom_id, :class => 'options' do |output|
-          # to guarantee that a value is returned, use a hidden field
-          emit_tag output, 'input', :type => 'hidden', :name => "#{object_stack.dom_name}[value]",
-            :value => ''
-          values.each do |val|
-            tag_attributes = {
-              :type => 'radio',
-              :name => "#{object_stack.dom_name}[value]",
-              :value => val.last
-            }
-            tag_attributes[:class] = 'other_trigger' if element.options[:other] && val == values.last
-            tag_attributes[:checked] = 't' if object_stack.object['value'] == val.last
-            emit_tag output, 'input', tag_attributes
-            output << Element.i18n(val.first, val.first) << '<br>'.html_safe
+          if element.options[:display_as] == :radio
+            # render selector as a set of radio buttons
+            # to guarantee that a value is returned, use a hidden field
+            emit_tag output, 'input', :type => 'hidden', :name => "#{object_stack.dom_name}[value]",
+              :value => ''
+            values.each do |val|
+              tag_attributes = {
+                :type => 'radio',
+                :name => "#{object_stack.dom_name}[value]",
+                :value => val.last
+              }
+              tag_attributes[:class] = 'other_trigger' if element.options[:other] && val == values.last
+              tag_attributes[:checked] = 'checked' if object_stack.object['value'] == val.last
+              emit_tag output, 'input', tag_attributes
+              output << Element.i18n(val.first, val.first) << '<br>'.html_safe
+            end
+          else
+            # render selector as a drop-down list
+            emit_tag output, 'select', :name => "#{object_stack.dom_name}[value]" do |output|
+              values.each do |val|
+                tag_attributes = { :value => val.last }
+                tag_attributes[:class] = 'other_trigger' if element.options[:other] && val == values.last
+                tag_attributes[:selected] = 'selected' if object_stack.object['value'] == val.last
+                emit_tag output, 'option', tag_attributes do |output|
+                  output << Element.i18n(val.first, val.first)
+                end
+              end
+            end
           end
           # render a hidden string element for possible other option
           tag_attributes = {
@@ -56,7 +73,7 @@ module Surveyor
             :class => 'other',
             :value => object_stack.object['other'],
           }
-          if values.any? && object_stack.object['value'] != values.last.last
+          if values.empty? || !element.options[:other] || object_stack.object['value'] != values.last.last
             tag_attributes[:style] = 'display:none'
             tag_attributes[:value] = ''
           end
