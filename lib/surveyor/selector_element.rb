@@ -13,13 +13,13 @@ module Surveyor
   #                 it shows a string field (with no label)
   # :required     - input data cannot be left empty.
   #
-  class RadioElement < Element
+  class SelectorElement < Element
     #
-    # Renderer for a radio element
+    # Renderer for a selector element
     #
     class HtmlRenderer < Surveyor::Element::HtmlRenderer
       # Render the HTML reresentation for inner part
-      # of the frame that characterizes the radio element.
+      # of the frame that characterizes the selector element.
       #
       # output - buffer in which the representation is put
       # object_stack - objectstack that represents the position

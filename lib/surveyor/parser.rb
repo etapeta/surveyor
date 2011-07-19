@@ -134,16 +134,16 @@ module Surveyor
       @container.elements << StringElement.new(@container, name, options)
     end
 
-    # Declare the a radio element.
-    # See RadioElement class.
+    # Declare the a selector element.
+    # See SelectorElement class.
     #
     # name    - name of the element
     # options - options of the element
     #
     # Return nothing.
-    def radio(name, options = {})
+    def selector(name, options = {})
       raise ParsingError, "missing :values option" unless options[:values]
-      @container.elements << RadioElement.new(@container, name, options)
+      @container.elements << SelectorElement.new(@container, name, options)
     end
 
     # Declare a survey sheet.
