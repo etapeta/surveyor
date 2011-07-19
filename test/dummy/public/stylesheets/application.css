@@ -12,6 +12,10 @@ label {
 }
 #templates_multiplied div.survey {
 }
+
+body {
+  font-size: 12px;
+}
 .factor {
   margin: 1px;
   padding: 0 5px 0 5px;
@@ -19,8 +23,16 @@ label {
 }
 .surv-container {
   padding-left: 5px;
+  background-color: #FFF;
+}
+.surv-block {
+  margin-top: 5px;
   background-color: #EEE;
 }
+.widget {
+  background-color: #FFF;
+}
+
 .surv-block label > span {
   font-weight: bold;
 }

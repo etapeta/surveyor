@@ -107,3 +107,29 @@ survey 'multiplied' do
     'champions.miami' => { :killed => true }
   }
 end
+
+survey 'arts', :no_label => true do
+  section 'tab_opinions', :id => 'tab_opi', :no_label => true do
+    radio 'type_of_auditor', :values => [
+      ['arts.types_of_auditor.private', 'private'],
+      ['arts.types_of_auditor.government', 'government'],
+      ['arts.types_of_auditor.government_private', 'government_private'],
+    ]
+    string 'auditor_name'
+    radio 'type_of_auditing_standards', :values => [
+      ['arts.type_of_auditing_standards.isa', 'isa'],
+      ['arts.type_of_auditing_standards.intosai', 'intosai'],
+      ['arts.type_of_auditing_standards.government_national', 'government_national'],
+      ['arts.type_of_auditing_standards.gaas', 'gaas'],
+      ['arts.type_of_auditing_standards.other', 'other']
+    ], :other => true
+    multiplier 'opinions' do
+    end
+  end
+  section 'tab_financial', :id => 'tab_fin', :no_label => true do
+    string 'here_financial'
+  end
+  section 'tab_overall', :id => 'tab_ove', :no_label => true do
+    string 'here_overall'
+  end
+end

@@ -9,6 +9,21 @@ en:
       not_present: "can't be blank"
       not_matching: "is not valid"
     attributes:
+      type_of_auditor: "Type of Auditor:"
+      type_of_auditing_standards: "Type of auditing standards:"
 
   ciao:
     caro: "Ciao %{name}"
+
+  arts:
+    types_of_auditor:
+      private: Private
+      government: Government/National Audit Office
+      government_private: Private for Government
+    type_of_auditing_standards:
+      isa: "International Standards of Auditing"
+      intosai: "INTOSAI"
+      government_national: "Government/national"
+      gaas: "GAAS"
+      other: "Other"
+      other_string: "Other auditing standard"

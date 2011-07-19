@@ -1,5 +1,17 @@
+<script>
+	$(function() {
+		$( "#tabs" ).tabs();
+	});
+</script>
+<div id="tabs">
+	<ul>
+		<li><a href="#tab_opi">Opinions</a></li>
+		<li><a href="#tab_fin">Financials</a></li>
+		<li><a href="#tab_ove">Overall</a></li>
+	</ul>
 <%= @survey.form_for(@hob, nil,
       :url => @nest ?
         url_for(:action => :update, :id => @nest.id, :survey => @survey.name, :sheet => params[:sheet]) :
         url_for(:action => :create, :survey => @survey.name, :sheet => params[:sheet]),
       :method => @nest ? :put : :post) %>
+</div>

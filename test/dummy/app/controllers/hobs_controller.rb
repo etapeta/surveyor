@@ -4,9 +4,9 @@ class HobsController < ApplicationController
   # GET /hobs
   def index
     nests = Nest.all.group_by(&:survey_name)
-    @surveys = all_surveys.inject(Hash[]) {|hash,surv|
-      hash[surv] = nests[surv.name] || []
-      hash
+    @surveys = all_surveys.inject([]) {|list,surv|
+      list << [surv, nests[surv.name] || []]
+      list
     }
   end
 
