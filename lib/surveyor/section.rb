@@ -5,21 +5,15 @@ module Surveyor
   # A section only generates a html wrapper for its elements,
   # but references them to its container.
   #
+  # While other container have an id calculated from survey renderering
+  # engine, sections are not identified.
+  # They can, though, be given a custom id just in order to identify them
+  # in DOM.
+  #
+  # Options for this element:
+  # :id - custom id of the frame that contains the section elements
+  #
   class Section < Container
-    #
-    # Renderer for a Section
-    #
-    class HtmlRenderer < Surveyor::Container::HtmlRenderer
-      def render(output, object_stack)
-        return if element.options[:killed]
-        emit_tag(output, 'div', :class => element.type) do |output|
-          emit_tag(output, 'h2', element.label) unless element.options[:no_label]
-          element.elements.each do |elem|
-            elem.renderer.render(output, object_stack + elem)
-          end
-        end
-      end
-    end
 
     # Default value that this element has when the survey
     # is instanciated (empty).
@@ -70,13 +64,6 @@ module Surveyor
     # Return nothing
     def validate_value(current_value, dom_namer, root_hob)
       raise NoBaseValueError, "a Section has no value to validate (#{dom_namer.id})"
-    end
-
-    # A html expert that can render a HTML representation for the element.
-    #
-    # Return a Object that respond to :render(output, object_stack).
-    def renderer
-      HtmlRenderer.new(self)
     end
 
     # An element is identifiable if it owns its elements.

@@ -16,7 +16,8 @@ module Surveyor
       # Return nothing
       def render(output, object_stack)
         return if element.options[:killed]
-        html_attrs = element.identifiable? ? { :id => object_stack.dom_id } : {}
+        html_attrs = element.identifiable? ? { :id => object_stack.dom_id } :
+          element.options[:id] ? { :id => element.options[:id] } : {}
         emit_tag(output, 'div', html_attrs.merge({:class => "surv-container #{element.type}"})) do |output|
           emit_tag(output, 'h2', element.label) unless element.options[:no_label]
           element.elements.each do |elem|
