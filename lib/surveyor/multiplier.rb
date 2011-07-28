@@ -80,12 +80,14 @@ module Surveyor
 
     # Label for action to add new multiplier items
     def label_add
-      Element.i18n(options[:label_add], :"survey.label_add", 'Add')
+      surv_name = (survey.options[:inner] && survey.options[:inner][:root_name]) || survey.name
+      Element.i18n(options[:label_add], :"survey.#{surv_name}.actions.#{name}.add", :"survey.label_add", 'Add')
     end
 
     # Label for action to remove existing multiplier items
     def label_remove
-      Element.i18n(options[:label_remove], :"survey.label_remove", 'Remove')
+      surv_name = (survey.options[:inner] && survey.options[:inner][:root_name]) || survey.name
+      Element.i18n(options[:label_remove], :"survey.#{surv_name}.actions.#{name}.remove", :"survey.label_remove", 'Remove')
     end
 
     # The default value that this element has when the survey

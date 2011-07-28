@@ -120,7 +120,10 @@ module Surveyor
     # Return a new Survey.
     def self.clone_for_factor(multiplier)
       surv = self.new(multiplier.path_name.gsub('.','__'),
-        multiplier.options.merge(:no_label => true, :inner => { :label_remove => multiplier.label_remove }))
+        multiplier.options.merge(:no_label => true, :inner => {
+          :label_remove => multiplier.label_remove,
+          :root_name => multiplier.survey.name
+        }))
       multiplier.elements.each do |elem|
         surv.elements << elem.clone(surv)
       end

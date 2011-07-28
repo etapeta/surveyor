@@ -72,11 +72,11 @@ class SurveyTest < ActiveSupport::TestCase
       :survey => {
         :path_separator => ' | ',
         :error_format => "« %{attribute} » : %{message}",
-        :attributes => {
-          :goalkeeper => 'Portiere',
-          :midfielder => 'NOT VALID'
-        },
         :nested => {
+          :attributes => {
+            :goalkeeper => 'Portiere',
+            :midfielder => 'NOT VALID'
+          },
           :football_roles => {
             # this label has priority vs :attributes:midfielder
             :midfielder => 'Centrocampista'

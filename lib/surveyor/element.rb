@@ -208,7 +208,8 @@ module Surveyor
     #
     # Return a String
     def label
-      Element.i18n(options[:label], :"survey.#{path_name}", :"survey.attributes.#{name}", name.humanize)
+      surv_name = (survey.options[:inner] && survey.options[:inner][:root_name]) || survey.name
+      Element.i18n(options[:label], :"survey.#{path_name}", :"survey.#{surv_name}.attributes.#{name}", name.humanize)
     end
 
     # When instantiated, can this element be changed, or
