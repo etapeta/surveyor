@@ -163,25 +163,6 @@ module Surveyor
       current_value
     end
 
-    # Validates current value on element's rules.
-    # Sets root_hob.errors on failed validations with dom_namer's id.
-    #
-    # current_value - current value for the element
-    # dom_namer     - naming information for the element
-    # root_hob      - Hob that corresponds to the Survey, and holds all errors
-    #                 for the element tree
-    #
-    # Return nothing
-    def validate_value(current_value, dom_namer, root_hob)
-      current_value.each_with_index do |obj, idx|
-        # reflects validations on elements
-        mult_namer = dom_namer * idx
-        accepted_elements.each do |elem|
-          elem.validate_value obj.send(elem.name), mult_namer + elem, root_hob
-        end
-      end
-    end
-
     # A html expert that can render a HTML representation for the element.
     #
     # Return a Object that respond to :render(output, object_stack).

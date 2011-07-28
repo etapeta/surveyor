@@ -95,7 +95,9 @@ module Surveyor
     # Return nothing.
     def validate
       return unless container.is_a?(Survey)
-      container.validate_value(self, DomNamer.start(container), self)
+      ObjectStack.new(container, self).traverse_deep_first do |os|
+        os.element.validate_value(os.object, os.local_id, errors)
+      end
     end
 
     # Errors object that holds all information

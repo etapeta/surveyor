@@ -120,17 +120,16 @@ module Surveyor
     end
 
     # Validates current value on element's rules.
-    # Sets root_hob.errors on failed validations with dom_namer's id.
+    # Sets errors on failed validations under local_id key.
     #
     # current_value - current value for the element
-    # dom_namer     - naming information for the element
-    # root_hob      - Hob that corresponds to the Survey, and holds all errors
-    #                 for the element tree
+    # local_id      - key that uniquely identifies the value within the tree data
+    # errors        - Errors for the tree data
     #
     # Return nothing
-    def validate_value(current_value, dom_namer, root_hob)
+    def validate_value(current_value, local_id, errors)
       if options[:required] && current_value['value'].blank?
-        root_hob.mark_error(dom_namer, :not_present)
+        errors[local_id] << "survey.errors.not_present"
       end
     end
 

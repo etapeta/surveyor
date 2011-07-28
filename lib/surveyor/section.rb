@@ -51,21 +51,6 @@ module Surveyor
       raise NoBaseValueError, 'a Section has no value to update'
     end
 
-    # Validates current value on element's rules.
-    # Sets root_hob.errors on failed validations with dom_namer's id.
-    # But a section owns no elements, so this method
-    # should never be called.
-    #
-    # current_value - current value for the element
-    # dom_namer     - naming information for the element
-    # root_hob      - Hob that corresponds to the Survey, and holds all errors
-    #                 for the element tree
-    #
-    # Return nothing
-    def validate_value(current_value, dom_namer, root_hob)
-      raise NoBaseValueError, "a Section has no value to validate (#{dom_namer.id})"
-    end
-
     # An element is identifiable if it owns its elements.
     # A section is (currently) the only element not identifiable.
     #

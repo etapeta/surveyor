@@ -90,6 +90,13 @@ module Surveyor
       dom_namer.id
     end
 
+    # id which identifies the current position within the data tree.
+    #
+    # Return a String
+    def local_id
+      (dom_namer.id[/:(.*)/, 1] || dom_namer.id).gsub(':','.')
+    end
+
     # name which identify the position within the survey hash data.
     # It is used in HTML rendering, to name the widget.
     #
