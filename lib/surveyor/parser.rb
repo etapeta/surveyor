@@ -134,6 +134,17 @@ module Surveyor
       @container.elements << StringElement.new(@container, name, options)
     end
 
+    # Declare the a text element.
+    # See TextElement class.
+    #
+    # name    - name of the element
+    # options - options of the element
+    #
+    # Return nothing.
+    def text(name, options = {})
+      @container.elements << TextElement.new(@container, name, options)
+    end
+
     # Declare the a selector element.
     # See SelectorElement class.
     #
