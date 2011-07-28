@@ -63,7 +63,7 @@ module Surveyor
         element.identifiable? ? dom_namer + element : dom_namer)
     end
 
-    # A new objectstack that corresponds to an instance of
+    # A new objectstack that corresponds to an item of
     # the current element, which is an Array.
     # This instance and the result instance will then be
     # associated to the same multiplier, respectively as
@@ -74,14 +74,14 @@ module Surveyor
     # idx - index that represents obj's position in current element.
     #
     # Return a ObjectStack
-    def mult(obj, idx)
+    def *(idx)
       unless element.type == 'multiplier'
         raise CannotMultiplyError, "Only multiplier objectstacks can be multiplied [not #{self.inspect}]"
       end
-      ObjectStack.new(self.element, obj, self, dom_namer * idx)
+      ObjectStack.new(self.element, self.object[idx], self, dom_namer * idx)
     end
 
-    # id which identifies the current position.
+    # id which uniquely identifies the current position.
     # It is generally used in HTML rendering, to identify the widget
     # that the current element instance is rendered into.
     #
@@ -115,7 +115,7 @@ module Surveyor
       case element
       when Multiplier
         object.each_with_index do |obj, idx|
-          obj_stack = mult(obj, idx)
+          obj_stack = self * idx
           element.accepted_elements.each do |elem|
             (obj_stack + elem).traverse_deep_first(&blk)
           end

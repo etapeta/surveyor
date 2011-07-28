@@ -27,10 +27,10 @@ class ObjectStackTest < ActiveSupport::TestCase
     assert_kind_of Surveyor::Hob, inner_hob
 
     os = @object_stack + @survey.find('tennis.players')
-    os = os.mult(@hob.players[1], 1)
+    os = os * 1
     hob = @survey.find('tennis.players.won_against')
     os = os + @survey.find('tennis.players.won_against')
-    os = os.mult(@hob.players[1].won_against[1], 1)
+    os = os * 1
 
     assert_same inner_hob, os.object
     assert_same @survey.find('tennis.players.won_against'), os.element
@@ -52,10 +52,10 @@ class ObjectStackTest < ActiveSupport::TestCase
     assert_kind_of Surveyor::Hob, inner_hob
 
     os = @object_stack + @survey.find('tennis.players')
-    os = os.mult(@hob.players[1], 1)
+    os = os * 1
     hob = @survey.find('tennis.players.won_against')
     os = os + @survey.find('tennis.players.won_against')
-    os = os.mult(@hob.players[1].won_against[1], 1)
+    os = os * 1
 
     assert_same inner_hob, os.object
     assert_same @survey.find('tennis.players.won_against'), os.element
