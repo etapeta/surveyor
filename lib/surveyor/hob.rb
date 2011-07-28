@@ -25,6 +25,16 @@ module Surveyor
       update(hhash) if hhash
     end
 
+    # Equality between hobs.
+    def eql?(hob)
+      to_h.eql?(hob.to_h)
+    end
+
+    # Equality between hobs.
+    def ==(hob)
+      to_h == hob.to_h
+    end
+
     # Update hob with new values.
     # Clears the hob's error status.
     #
@@ -40,6 +50,48 @@ module Surveyor
       end
     end
 
+    # Update hob with new values.
+    # Clears the hob's error status.
+    #
+    # hash - flat hash of new values. It can partially cover the whole hob.
+    #
+    # Return nothing
+    def update_flat(hash)
+      errors.clear
+      hash.each do |field_key,value|
+        fields = field_key.split(':')
+        os = ObjectStack.new(container, self)
+        fields.each do |field|
+          # puts "#{os.element.inspect} <- #{os.object.inspect}: find #{field}"
+          if field.start_with?('0')
+            # index of a multiplier
+            idx = field.to_i
+            if os.object.size > idx
+              # update multiplier item
+              os = os * idx
+            elsif os.object.size == idx
+              # add another multiplier item
+              hob = Hob.new(os.element)
+              os.object << hob
+              os = os * idx
+            else
+              raise SmallerArrayError, 'out of bounds index'
+            end
+          else
+            # standard field: inner container or final element?
+            # NOTE: some final elements as well as containers can hold a hash value
+            next_element = os.element.accepted_element_at(field)
+            if next_element.is_a?(Container)
+              os = os + next_element
+            else
+              os.object[field] = next_element.update_field(os.object[field], value)
+              break
+            end
+          end
+        end
+      end
+    end
+
     # Generate a hash of data for the hob
     # if the container is a Multiplier, the hob represents one of its factors.
     # Note that generally the container of a hob cannot be a multiplier.
@@ -50,6 +102,20 @@ module Surveyor
       else
         @container.simple_out(self)
       end
+    end
+
+    # Generate a flat hash of data for the hob
+    # The hash keys are modeled after the html id generation.
+    def to_flat_h
+      os = ObjectStack.new(@container, self)
+      result = {}
+      start = @container.name.size + 1
+      os.traverse_deep_first do |oss|
+        unless oss.element.is_a?(Container)
+          result[oss.dom_id[start..-1]] = oss.object
+        end
+      end
+      result
     end
 
     # Content of a hob's field.

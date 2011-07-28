@@ -80,7 +80,7 @@ class HobTest < ActiveSupport::TestCase
     assert @hob.respond_to?('players=')
   end
 
-  test 'update simple' do
+  test 'a hob can be updated from a hash' do
     # load the hob with a hash
     form_data = {
       'goalkeeper' => 'zoff',
@@ -477,6 +477,73 @@ class HobTest < ActiveSupport::TestCase
 
   test 'a hob can be inspected' do
     assert_equal 'Surveyor::Hob<survey>{goalkeeper:"",defender:"",midfielder:"",forward:"",tournaments:...,champions:...,players:...}', @hob.inspect
+  end
+
+  test 'a hob can generate a flat hash' do
+    assert_equal Hash[
+      "tournaments:grand_slam:open_australia" => "",
+      "tournaments:grand_slam:roland_garros" => "",
+      "tournaments:grand_slam:wimbledon" => "",
+      "tournaments:grand_slam:open_usa" => "",
+      "tournaments:master" => "",
+      "tournaments:foro_italico" => "",
+      "midfielder" => "",
+      "defender" => "",
+      "forward" => "",
+      "goalkeeper" => "",
+      "champions:rod_laver" => "",
+      "champions:roger_federer" => "",
+      "champions:john_mcenroe" => "",
+      "champions:rafael_nadal" => "",
+      "champions:bjorn_borg" => "",
+      "champions:boris_becker" => "",
+    ], @hob.to_flat_h
+
+    # check with active multipliers items
+    hob = factory(:full_hob)
+    assert_equal Hash[
+      "champions:bjorn_borg"=>"the best",
+      "champions:boris_becker"=>"",
+      "champions:john_mcenroe"=>"the genius",
+      "champions:rafael_nadal"=>"the grit",
+      "champions:rod_laver"=>"",
+      "champions:roger_federer"=>"the perfection",
+      "defender"=>"cannavaro",
+      "forward"=>"rossi",
+      "goalkeeper"=>"zoff",
+      "midfielder"=>"pirlo",
+      "players:000:name"=>"federer",
+      "players:000:won_against:000:name"=>"nadal",
+      "players:000:won_against:000:tournament"=>"open usa",
+      "players:000:won_against:000:when"=>"2007",
+      "players:000:won_against:001:name"=>"djokovic",
+      "players:000:won_against:001:when"=>"2010",
+      "players:000:won_against:001:tournament"=>"wimbledon",
+      "players:001:name"=>"nadal",
+      "players:001:won_against:000:name"=>"djokovic",
+      "players:001:won_against:000:tournament"=>"open usa",
+      "players:001:won_against:000:when"=>"2010",
+      "players:001:won_against:001:name"=>"federer",
+      "players:001:won_against:001:tournament"=>"wimbledon",
+      "players:001:won_against:001:when"=>"2010",
+      "tournaments:foro_italico"=>"2011",
+      "tournaments:grand_slam:open_australia"=>"2010",
+      "tournaments:grand_slam:open_usa"=>"2010",
+      "tournaments:grand_slam:roland_garros"=>"2011",
+      "tournaments:grand_slam:wimbledon"=>"2011",
+      "tournaments:master"=>"2008",
+    ], hob.to_flat_h
+  end
+
+  test 'a hob can be updated from a flat hash' do
+    hob2 = Surveyor::Hob.new(@hob.container)
+    hob2.update_flat(@hob.to_flat_h)
+    assert_equal @hob, hob2
+
+    hob = factory(:full_hob)
+    hob2 = Surveyor::Hob.new(hob.container)
+    hob2.update_flat(hob.to_flat_h)
+    assert_equal hob, hob2
   end
 
 end
