@@ -31,7 +31,7 @@ module Surveyor
           # existing elements
           object_stack.object.each_with_index do |obj, idx|
             emit_tag(output, 'div', :class => 'factor', :id => "#{object_stack.dom_id}_#{idx}") do |output|
-              obj_stack = object_stack.mult(obj, idx)
+              obj_stack = object_stack * idx
               element.elements.each do |elem|
                 elem.renderer.render(output, obj_stack + elem)
               end

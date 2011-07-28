@@ -50,21 +50,11 @@ module Surveyor
       plus(elem)
     end
 
-    # Instances a new dom namer for an indexed instance of the
-    # current object, which is an Array, associated to a multiplier.
-    #
-    # index - index of the element instance
-    #
-    # Return a DomNamer.
-    def mult(index)
-      self.class.new("#{@name}[]", "#{@id}:#{index}")
-    end
-
     # Alias for :mult
     #
     # Return a DomNamer.
     def *(index)
-      mult(index)
+      self.class.new("#{@name}[]", "#{@id}:#{'%03d' % index}")
     end
 
   end

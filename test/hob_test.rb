@@ -450,7 +450,7 @@ class HobTest < ActiveSupport::TestCase
     hob = Surveyor::Hob.new(survey, {'mixed' => [{'one' => '1', 'two' => '2'}, {'one' => '', 'two' => '4'}] })
     assert_equal false, hob.valid?
 
-    assert_equal ["survey.errors.not_present"], hob.errors[:"mixed.1.one"]
+    assert_equal ["survey.errors.not_present"], hob.errors[:"mixed.001.one"]
     assert_equal ["Mixed #2 > One can't be blank"], hob.errors.full_messages
   end
 
