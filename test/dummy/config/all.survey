@@ -114,7 +114,7 @@ survey 'arts', :no_label => true do
       ['arts.types_of_auditor.private', 'private'],
       ['arts.types_of_auditor.government', 'government'],
       ['arts.types_of_auditor.government_private', 'government_private'],
-    ]
+    ], :display_as => :radio, :required => true
     string 'auditor_name'
     selector 'type_of_auditing_standards', :values => [
       ['arts.type_of_auditing_standards.isa', 'isa'],
@@ -122,8 +122,49 @@ survey 'arts', :no_label => true do
       ['arts.type_of_auditing_standards.government_national', 'government_national'],
       ['arts.type_of_auditing_standards.gaas', 'gaas'],
       ['arts.type_of_auditing_standards.other', 'other']
-    ], :other => true
+    ], :other => true, :display_as => :radio, :required => true
     multiplier 'opinions' do
+      selector 'financial_product', :values => ['G-I-S-84-', 'L-I-S-444-'], :required => true
+      # selector 'object', :values => [
+      #   'Financial Statements',
+      #   'Statement of Expenditures',
+      #   'Special/Designated Account'
+      # ], :required => true
+      # multiplier 'opinion_types', :required => true do
+      #   selector 'rating', :values => [
+      #     'Not applicable',
+      #     'Unqualified',
+      #     'Unqualified but emphasis on matter',
+      #     'Qualified - limitation in scope',
+      #     'Qualified - exception',
+      #     'Adverse',
+      #     'Disclaimer'
+      #   ], :required => true
+      #   text 'rating_justification', :rows => 4, :cols => 80
+      #   selector 'audit_report', :values => ['first file', 'second file']
+      # end
+    end
+    multiplier 'other_opinions' do
+      selector 'other_object', :values => [
+        'Compliance with Loan Agreement Clauses',
+        'Procurement',
+        'Internal Controls',
+        'Other'
+      ], :required => true
+      string 'descr', :size => 80
+      string 'opi'
+      text 'comment', :rows => 3, :cols => 80
+    end
+    multiplier 'unexpected_opinions' do
+      selector 'object', :values => [
+        'Compliance with Loan Agreement Clauses',
+        'Procurement',
+        'Internal Controls',
+        'Other'
+      ]
+      string 'descr', :size => 80
+      string 'opi'
+      text 'comment', :rows => 3, :cols => 80
     end
   end
   section 'tab_financial', :id => 'tab_fin', :no_label => true do

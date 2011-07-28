@@ -3,7 +3,7 @@ div.section {
   border: thin solid green;
   padding: 0 5px 0 5px;
 }
-div.section h2 {
+div.section > h2 {
   font-size: 1.2em;
 }
 label {
@@ -32,7 +32,11 @@ body {
 .widget {
   background-color: #FFF;
 }
-
+.multiplier > h2 {
+  margin: 5px 0 0 0;
+  font-size: 13px;
+  background-color: #baf299;
+}
 .surv-block label > span {
   font-weight: bold;
 }

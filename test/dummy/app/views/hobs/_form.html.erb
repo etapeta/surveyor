@@ -4,11 +4,13 @@
 	});
 </script>
 <div id="tabs">
+<% if @survey.name == 'arts' %>
 	<ul>
 		<li><a href="#tab_opi">Opinions</a></li>
 		<li><a href="#tab_fin">Financials</a></li>
 		<li><a href="#tab_ove">Overall</a></li>
 	</ul>
+<% end %>
 <%= @survey.form_for(@hob, nil,
       :url => @nest ?
         url_for(:action => :update, :id => @nest.id, :survey => @survey.name, :sheet => params[:sheet]) :

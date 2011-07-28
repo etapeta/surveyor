@@ -8,14 +8,44 @@ en:
     errors:
       not_present: "can't be blank"
       not_matching: "is not valid"
-    attributes:
-      type_of_auditor: "Type of Auditor:"
-      type_of_auditing_standards: "Type of auditing standards:"
+    arts:
+      attributes:
+        type_of_auditor: "Type of Auditor:"
+        auditor_name: "Auditor name:"
+        type_of_auditing_standards: "Type of auditing standards:"
+        financial_product: "Financial Product:"
+        object: "Object:"
+        rating: "Rating:"
+        rating_justification: "Comment:"
+        other_object: "Object:"
+        descr: "Description:"
+        opi: "Opinion:"
+        comment: "Comment:"
+        audit_report: "Audit Report:"
+      actions:
+        opinions:
+          remove: "Remove this whole opinion"
+          add: "Add an opinion"
+        opinion_types:
+          remove: "Remove this opinion type"
+          add: "Add an opinion type"
+        other_opinions:
+          add: "Add an opinion"
+          remove: "Remove this opinion"
+        unexpected_opinions:
+          add: "Add an unexpected opinion"
+          remove: "Remove this unexpected opinion"
 
   ciao:
     caro: "Ciao %{name}"
 
   arts:
+    opinions:
+      remove: "Remove this whole opinion"
+      add: "Add an opinion"
+    opinion_types:
+      remove: "Remove this opinion type"
+      add: "Add an opinion type"
     types_of_auditor:
       private: Private
       government: Government/National Audit Office
